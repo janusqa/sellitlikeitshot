@@ -1,5 +1,5 @@
 # project setup
-$ npx create-expo-app@latest .
+$ npx create-expo-app@latest --template .
 $ touch tsconfig.json
 $ npx expo start
 
@@ -222,3 +222,12 @@ https://expo.dev/notifications
 
 sending from a backend https://docs.expo.dev/push-notifications/sending-notifications/
 checke out http/2 api
+
+# Hooks: Very good library to handle things like device orientation
+npm i @react-native-community/hooks@latest
+
+# Gesture Handlers
+$ npx expo install react-native-gesture-handler
+
+# Forms
+npm i zod react-hook-form @hookform/resolvers
