@@ -1,25 +1,29 @@
-import { StyleSheet, Pressable, type ViewStyle } from 'react-native';
+import {
+    StyleSheet,
+    Pressable,
+    type ViewStyle,
+    type ColorValue,
+} from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-export type IonIconName = React.ComponentProps<
-    typeof MaterialCommunityIcons
->['name'];
+export type IconProps = React.ComponentProps<typeof MaterialCommunityIcons>;
 
-type Props = {
-    icon: IonIconName;
-    size: number;
-    color: string;
+export type Props = {
+    name: IconProps['name'];
+    size?: number;
+    color?: ColorValue;
     onPress?: () => void;
     style?: ViewStyle;
+    isButton?: boolean;
 };
 
-const IconButton = ({ icon, size, color, onPress, style }: Props) => {
+const IconButton = ({ name, size, color, onPress, style }: Props) => {
     return (
         <Pressable
             onPress={onPress}
             style={({ pressed }) => [style ?? null, pressed && styles.pressed]}
         >
-            <MaterialCommunityIcons name={icon} size={size} color={color} />
+            <MaterialCommunityIcons name={name} size={size} color={color} />
         </Pressable>
     );
 };

@@ -1,15 +1,23 @@
-import { StyleSheet, View, Image } from 'react-native';
+import {
+    StyleSheet,
+    View,
+    Image,
+    type ImageSourcePropType,
+    type ViewStyle,
+} from 'react-native';
+
 import AppText from '../components/AppText';
 import COLORS from '../constants/colors';
-import UserProfileSmall from '../components/ListItem';
+import UserProfileSmall from '../components/lists/ListItem';
 
 interface Props {
-    image: any;
+    image: ImageSourcePropType;
+    style?: ViewStyle;
 }
 
-const ListingDetailsScreen = ({ image }: Props) => {
+const ListingDetailsScreen = ({ image, style }: Props) => {
     return (
-        <View>
+        <View style={[styles.container, !!style && style]}>
             <Image style={styles.image} source={image} />
             <View style={styles.details}>
                 <AppText style={styles.title}>Red jacket for sale!</AppText>
@@ -29,6 +37,9 @@ const ListingDetailsScreen = ({ image }: Props) => {
 export default ListingDetailsScreen;
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+    },
     image: {
         width: '100%',
         height: 300,

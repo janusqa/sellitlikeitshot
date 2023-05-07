@@ -1,6 +1,6 @@
-import { SectionList } from 'react-native';
+import { SectionList, View, StyleSheet, type ViewStyle } from 'react-native';
 
-import ListItem, { type ListItemType } from '../components/ListItem';
+import ListItem, { type ListItemType } from '../components/lists/ListItem';
 import COLORS from '../constants/colors';
 import IconButton from '../components/IconButton';
 import ListItemSeperator from '../components/ListItemSeperator';
@@ -23,7 +23,7 @@ const DATA: { title: string; data: ListItemType[] }[] = [
             {
                 title: 'My Listings',
                 icon: {
-                    icon: 'format-list-bulleted',
+                    name: 'format-list-bulleted',
                     size: 20,
                     color: COLORS.white,
                     style: {
@@ -39,7 +39,7 @@ const DATA: { title: string; data: ListItemType[] }[] = [
             {
                 title: 'My Messages',
                 icon: {
-                    icon: 'email',
+                    name: 'email',
                     size: 20,
                     color: COLORS.white,
                     style: {
@@ -60,7 +60,7 @@ const DATA: { title: string; data: ListItemType[] }[] = [
             {
                 title: 'Sign Out',
                 icon: {
-                    icon: 'logout',
+                    name: 'logout',
                     size: 20,
                     color: COLORS.white,
                     style: {
@@ -77,25 +77,37 @@ const DATA: { title: string; data: ListItemType[] }[] = [
     },
 ];
 
-const AccountsScreen = () => {
+interface Props {
+    style?: ViewStyle;
+}
+
+const AccountsScreen = ({ style }: Props) => {
     return (
-        <SectionList
-            sections={DATA}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={({ item }) => (
-                <ListItem
-                    title={item.title}
-                    subTitle={item.subTitle}
-                    image={item.image}
-                    IconComponent={
-                        item.icon ? <IconButton {...item.icon} /> : null
-                    }
-                />
-            )}
-            ItemSeparatorComponent={ListItemSeperator}
-            SectionSeparatorComponent={ListSectionSeperator}
-        />
+        <View style={[styles.container, !!style && style]}>
+            <SectionList
+                sections={DATA}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={({ item }) => (
+                    <ListItem
+                        title={item.title}
+                        subTitle={item.subTitle}
+                        image={item.image}
+                        IconComponent={
+                            item.icon ? <IconButton {...item.icon} /> : null
+                        }
+                    />
+                )}
+                ItemSeparatorComponent={ListItemSeperator}
+                SectionSeparatorComponent={ListSectionSeperator}
+            />
+        </View>
     );
 };
 
 export default AccountsScreen;
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+    },
+});

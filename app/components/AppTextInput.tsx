@@ -10,13 +10,10 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import COLORS from '../constants/colors';
 import defaultStyles from '../constants/styles';
-
-export type IonIconName = React.ComponentProps<
-    typeof MaterialCommunityIcons
->['name'];
+import { type IconProps } from './IconButton';
 
 interface Props {
-    icon?: IonIconName;
+    icon?: IconProps['name'];
     style?: ViewStyle;
     textInputProps?: TextInputProps;
 }
@@ -33,7 +30,11 @@ const AppTextInput = ({ icon, style, textInputProps }: Props) => {
                         style={styles.icon}
                     />
                 )}
-                <TextInput style={defaultStyles.text} {...textInputProps} />
+                <TextInput
+                    style={defaultStyles.text}
+                    {...textInputProps}
+                    placeholderTextColor={COLORS.mediumGray}
+                />
             </View>
         </>
     );

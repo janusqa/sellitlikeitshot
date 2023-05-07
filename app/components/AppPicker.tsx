@@ -5,6 +5,7 @@ import {
     View,
     type ViewStyle,
     FlatList,
+    type ColorValue,
 } from 'react-native';
 import { useState } from 'react';
 
@@ -13,29 +14,39 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import COLORS from '../constants/colors';
 import AppText from './AppText';
 import AppButton from './AppButton';
-import AppPickerItem from './AppPickerItem';
+import { type Props as PickerItemProps } from './AppPickerItem';
+import { type IconProps } from './IconButton';
 
-export type IonIconName = React.ComponentProps<
-    typeof MaterialCommunityIcons
->['name'];
-
-interface Props<T extends { label: string }> {
-    icon?: IonIconName;
-    placeholder: string;
-    items: T[];
-    style?: ViewStyle;
-    selectedItem: T | null;
-    onSelectItem: (item: T) => void;
+export interface Item {
+    label: string;
+    value: string | number;
+    color?: ColorValue;
+    icon?: IconProps['name'];
 }
 
-const AppPicker = <T extends { label: string }>({
+interface Props {
+    icon?: IconProps['name'];
+    placeholder: string;
+    style?: ViewStyle;
+    items: Item[];
+    numColumns?: number;
+    renderPickerItemComponent: (
+        settings: PickerItemProps
+    ) => React.ReactElement<PickerItemProps>;
+    selectedItem: Item | null;
+    onSelectItem: (item: Item) => void;
+}
+
+const AppPicker = ({
     icon,
-    style,
     placeholder,
+    style,
     items,
+    numColumns,
+    renderPickerItemComponent,
     selectedItem,
     onSelectItem,
-}: Props<T>) => {
+}: Props) => {
     const [showModal, setShowModal] = useState<boolean>(false);
 
     return (
@@ -50,8 +61,14 @@ const AppPicker = <T extends { label: string }>({
                             style={styles.icon}
                         />
                     )}
-                    <AppText style={styles.text}>
-                        {selectedItem?.label ?? placeholder}
+                    <AppText
+                        style={
+                            selectedItem
+                                ? styles.text
+                                : { ...styles.text, ...styles.placeholder }
+                        }
+                    >
+                        {selectedItem ? selectedItem.label : placeholder}
                     </AppText>
                     <MaterialCommunityIcons
                         name="chevron-down"
@@ -61,24 +78,31 @@ const AppPicker = <T extends { label: string }>({
                 </View>
             </Pressable>
             <Modal visible={showModal} animationType="slide">
-                <AppButton
-                    title="close"
-                    color={COLORS.primary}
-                    onPress={() => setShowModal(false)}
-                />
-                <FlatList
-                    data={items}
-                    keyExtractor={(item, index) => index.toString()}
-                    renderItem={({ item }) => (
-                        <AppPickerItem
-                            title={item.label}
-                            onPress={() => {
-                                setShowModal(false);
-                                onSelectItem(item);
-                            }}
-                        />
-                    )}
-                />
+                <View style={styles.modal}>
+                    <AppButton
+                        title="close"
+                        color={COLORS.primary}
+                        onPress={() => setShowModal(false)}
+                    />
+                    <FlatList
+                        data={items}
+                        numColumns={numColumns}
+                        keyExtractor={(_, index) => index.toString()}
+                        renderItem={({ item }) =>
+                            renderPickerItemComponent({
+                                title: item.label,
+                                icon: {
+                                    color: item.color,
+                                    name: item.icon,
+                                },
+                                onPress: () => {
+                                    setShowModal(false);
+                                    onSelectItem(item);
+                                },
+                            } as PickerItemProps)
+                        }
+                    />
+                </View>
             </Modal>
         </>
     );
@@ -101,5 +125,11 @@ const styles = StyleSheet.create({
     },
     text: {
         flex: 1,
+    },
+    placeholder: {
+        color: COLORS.mediumGray,
+    },
+    modal: {
+        padding: 10,
     },
 });

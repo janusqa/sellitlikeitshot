@@ -4,23 +4,25 @@ import {
     View,
     Pressable,
     type ViewStyle,
+    type ImageSourcePropType,
 } from 'react-native';
 import {
     Swipeable,
     GestureHandlerRootView,
 } from 'react-native-gesture-handler';
 
-import AppText from './AppText';
-import COLORS from '../constants/colors';
-import type React from 'react';
-import { type IonIconName } from './IconButton';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+
+import AppText from '../AppText';
+import COLORS from '../../constants/colors';
+import { type IconProps } from '../IconButton';
 
 export interface ListItemType {
     title: string;
     subTitle?: string;
-    image?: any;
+    image?: ImageSourcePropType;
     icon?: {
-        icon: IonIconName;
+        name: IconProps['name'];
         size: number;
         color: string;
         style: ViewStyle;
@@ -30,7 +32,7 @@ export interface ListItemType {
 interface Props {
     title: string;
     subTitle?: string;
-    image?: any;
+    image?: ImageSourcePropType;
     IconComponent?: React.ReactNode;
     onPress?: () => void;
     onSwipeLeft?: () => React.ReactNode;
@@ -62,13 +64,26 @@ const ListItem = ({
                             !(IconComponent || image) && { marginLeft: 0 },
                         ]}
                     >
-                        <AppText style={styles.title}>{title}</AppText>
+                        <AppText
+                            style={styles.title}
+                            textProps={{ numberOfLines: 1 }}
+                        >
+                            {title}
+                        </AppText>
                         {subTitle && (
-                            <AppText style={styles.subTitle}>
+                            <AppText
+                                style={styles.subTitle}
+                                textProps={{ numberOfLines: 2 }}
+                            >
                                 {subTitle}
                             </AppText>
                         )}
                     </View>
+                    <MaterialCommunityIcons
+                        color={COLORS.mediumGray}
+                        name="chevron-right"
+                        size={25}
+                    />
                 </Pressable>
             </Swipeable>
         </GestureHandlerRootView>
@@ -93,6 +108,7 @@ const styles = StyleSheet.create({
         borderRadius: 35,
     },
     detailsContainer: {
+        flex: 1,
         marginLeft: 10,
         justifyContent: 'center',
     },

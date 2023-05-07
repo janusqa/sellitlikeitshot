@@ -1,42 +1,54 @@
-import { StyleSheet, Text, View, FlatList } from 'react-native';
+import {
+    View,
+    FlatList,
+    StyleSheet,
+    type ImageSourcePropType,
+    type ViewStyle,
+} from 'react-native';
 import { useState } from 'react';
 
-import ListItem from '../components/ListItem';
-import ListItemSeperator from '../components/ListItemSeperator';
-import ListItemDeleteAction from '../components/ListItemDeleteAction';
+import ListItem from '../components/lists/ListItem';
+import ListItemSeperator from '../components/lists/ListItemSeperator';
+import ListItemDeleteAction from '../components/lists/ListItemDeleteAction';
 
 interface MessageType {
     id: number;
     title: string;
     description: string;
-    image: any;
+    image: ImageSourcePropType;
 }
 
 const initialMessages = [
     {
         id: 1,
-        title: 'T1',
-        description: 'D1',
+        title: 'Janus QA',
+        description:
+            'Hey! Is this item still available? I just wanted to let you know that it is available now. Thanks!',
         image: require('../assets/mosh.jpg'),
     },
     {
         id: 2,
-        title: 'T2',
-        description: 'D2',
+        title: 'Janus QA',
+        description:
+            "I'm interested in this item. When will you be able to post it?",
         image: require('../assets/mosh.jpg'),
     },
 ];
 
-const MessagesScreen = () => {
+interface Props {
+    style?: ViewStyle;
+}
+
+const MessagesScreen = ({ style }: Props) => {
     const [messages, setMessages] = useState<MessageType[]>(initialMessages);
-    const [refreshing, setRefreshing] = useState<boolean>(false);
+    const [refreshing] = useState<boolean>(false);
 
     const handleDelete = (message: MessageType) => {
         setMessages(messages.filter((m) => m.id !== message.id));
     };
 
     return (
-        <View>
+        <View style={[styles.container, !!style && style]}>
             <FlatList
                 data={messages}
                 keyExtractor={(item) => item.id.toString()}
@@ -73,3 +85,9 @@ const MessagesScreen = () => {
 };
 
 export default MessagesScreen;
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+    },
+});

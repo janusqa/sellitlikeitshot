@@ -1,4 +1,4 @@
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, type ViewStyle } from 'react-native';
 import { FlatList } from 'react-native';
 import Card from '../components/Card';
 
@@ -17,9 +17,13 @@ const listings = [
     },
 ];
 
-const ListingsScreen = () => {
+interface Props {
+    style?: ViewStyle;
+}
+
+const ListingsScreen = ({ style }: Props) => {
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, !!style && style]}>
             <FlatList
                 data={listings}
                 keyExtractor={(item) => item.id.toString()}
@@ -40,6 +44,5 @@ export default ListingsScreen;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 15,
     },
 });

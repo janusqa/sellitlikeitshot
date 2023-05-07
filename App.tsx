@@ -1,3 +1,4 @@
+import type React from 'react';
 import { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, StatusBar as StatusBarRN, Switch } from 'react-native';
@@ -9,8 +10,8 @@ import ListingDetailsScreen from './app/screens/ListingDetailsScreen';
 import MessagesScreen from './app/screens/MessagesScreen';
 import IconButton from './app/components/IconButton';
 import COLORS from './app/constants/colors';
-import ListItem from './app/components/ListItem';
-import ListItemDeleteAction from './app/components/ListItemDeleteAction';
+import ListItem from './app/components/lists/ListItem';
+import ListItemDeleteAction from './app/components/lists/ListItemDeleteAction';
 import AccountsScreen from './app/screens/AccountsScreen';
 import ListingsScreen from './app/screens/ListingsScreen';
 import AppTextInput from './app/components/AppTextInput';
@@ -18,6 +19,14 @@ import AppText from './app/components/AppText';
 import AppPicker from './app/components/AppPicker';
 import AppPickerItem from './app/components/AppPickerItem';
 import LoginScreen from './app/screens/LoginScreen';
+import ListingEditScreen from './app/screens/ListingEditScreen';
+
+import {
+    MyButtonWithIconElement,
+    MyButtonWithIconComponent,
+    MyButtonWithIconRenderFunc,
+} from './app/screens/ComponetAsProp';
+import { IconProps } from './app/components/IconButton';
 
 const categories = [
     {
@@ -37,7 +46,7 @@ const categories = [
 const App = () => {
     return (
         <Screen style={{ backgroundColor: COLORS.lightGray }}>
-            <LoginScreen />
+            <ListingEditScreen />
         </Screen>
     );
 };

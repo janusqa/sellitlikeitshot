@@ -1,42 +1,58 @@
-import { View, Text, Image, StyleSheet, ImageBackground } from 'react-native';
+import {
+    View,
+    Text,
+    Image,
+    StyleSheet,
+    ImageBackground,
+    type ViewStyle,
+} from 'react-native';
 
 import backgroundImage from '../assets/background.jpg';
 import logo from '../assets/logo-red.png';
 import COLORS from '../constants/colors';
 import AppButton from '../components/AppButton';
 
-const WelcomeScreen = () => {
+interface Props {
+    style?: ViewStyle;
+}
+
+const WelcomeScreen = ({ style }: Props) => {
     return (
-        <ImageBackground
-            blurRadius={10}
-            style={styles.background}
-            source={backgroundImage}
-        >
-            <View style={styles.logoContainer}>
-                <Image source={logo} style={styles.logo} />
-                <Text style={styles.tagline}>
-                    Sell What You Don&apos;t Need
-                </Text>
-            </View>
-            <View style={styles.buttonContainer}>
-                <AppButton
-                    title="login"
-                    color={COLORS.primary}
-                    onPress={() => console.log('login')}
-                />
-                <AppButton
-                    title="register"
-                    color={COLORS.secondary}
-                    onPress={() => console.log('register')}
-                />
-            </View>
-        </ImageBackground>
+        <View style={[styles.container, !!style && style]}>
+            <ImageBackground
+                blurRadius={10}
+                style={styles.background}
+                source={backgroundImage}
+            >
+                <View style={styles.logoContainer}>
+                    <Image source={logo} style={styles.logo} />
+                    <Text style={styles.tagline}>
+                        Sell What You Don&apos;t Need
+                    </Text>
+                </View>
+                <View style={styles.buttonContainer}>
+                    <AppButton
+                        title="login"
+                        color={COLORS.primary}
+                        onPress={() => console.log('login')}
+                    />
+                    <AppButton
+                        title="register"
+                        color={COLORS.secondary}
+                        onPress={() => console.log('register')}
+                    />
+                </View>
+            </ImageBackground>
+        </View>
     );
 };
 
 export default WelcomeScreen;
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+    },
     background: {
         flex: 1,
         justifyContent: 'flex-end',

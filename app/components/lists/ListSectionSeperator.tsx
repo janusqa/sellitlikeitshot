@@ -1,5 +1,5 @@
 import { StyleSheet, View } from 'react-native';
-import COLORS from '../constants/colors';
+import COLORS from '../../constants/colors';
 
 const ListSectionSeperator = () => {
     return <View style={styles.seperator} />;

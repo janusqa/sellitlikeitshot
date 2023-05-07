@@ -1,6 +1,5 @@
 import { type ViewStyle } from 'react-native';
 
-import { type MaterialCommunityIcons } from '@expo/vector-icons';
 import {
     useFormContext,
     type FieldValues,
@@ -8,23 +7,25 @@ import {
     Controller,
 } from 'react-hook-form';
 
-import AppPicker from '../AppPicker';
+import AppPicker, { type Item } from '../AppPicker';
+import { type Props as PickerItemProps } from '../AppPickerItem';
 import ErrorMessage from '../ErrorMessage';
+import { type IconProps } from '../IconButton';
 
-export type IonIconName = React.ComponentProps<
-    typeof MaterialCommunityIcons
->['name'];
-
-interface Props<T extends FieldValues & { label: string }>
-    extends UseControllerProps<T> {
-    icon?: IonIconName;
+interface Props<T extends FieldValues> extends UseControllerProps<T> {
+    icon?: IconProps['name'];
     placeholder: string;
     style?: ViewStyle;
-    items: T[];
+    items: Item[];
+    numColumns?: number;
+    renderPickerItemComponent: (
+        settings: PickerItemProps
+    ) => React.ReactElement<PickerItemProps>;
 }
 
-const AppFormPicker = <T extends FieldValues & { label: string }>({
+const AppFormPicker = <T extends FieldValues>({
     name,
+    renderPickerItemComponent,
     ...otherProps
 }: Props<T>) => {
     const {
@@ -32,6 +33,7 @@ const AppFormPicker = <T extends FieldValues & { label: string }>({
         control,
         formState: { errors },
     } = useFormContext();
+
     return (
         <>
             <Controller
@@ -40,12 +42,15 @@ const AppFormPicker = <T extends FieldValues & { label: string }>({
                 render={({ field: { value } }) => (
                     <AppPicker
                         {...otherProps}
+                        renderPickerItemComponent={renderPickerItemComponent}
                         selectedItem={value}
-                        onSelectItem={(item) => setValue(name, value)}
+                        onSelectItem={(item) => {
+                            setValue(name, item);
+                        }}
                     />
                 )}
             />
-            <ErrorMessage message={errors[name]?.message?.toString()} />
+            <ErrorMessage message={errors[name] && 'Invalid selection'} />
         </>
     );
 };

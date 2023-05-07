@@ -1,15 +1,19 @@
-import { StyleSheet, Image, View } from 'react-native';
+import { StyleSheet, Image, View, type ViewStyle } from 'react-native';
 
 import IconButton from '../components/IconButton';
 import imgChair from '../assets/chair.jpg';
 import COLORS from '../constants/colors';
 
-const ViewImageScreen = () => {
+interface Props {
+    style?: ViewStyle;
+}
+
+const ViewImageScreen = ({ style }: Props) => {
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, !!style && style]}>
             <IconButton
                 style={styles.closeIcon}
-                icon="close"
+                name="close"
                 color={COLORS.white}
                 size={35}
                 onPress={() => {
@@ -18,7 +22,7 @@ const ViewImageScreen = () => {
             />
             <IconButton
                 style={styles.deleteIcon}
-                icon="trash-can-outline"
+                name="trash-can-outline"
                 color={COLORS.white}
                 size={35}
                 onPress={() => {

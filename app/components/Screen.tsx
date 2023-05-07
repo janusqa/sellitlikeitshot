@@ -5,11 +5,13 @@ import {
     SafeAreaView,
     type ViewStyle,
 } from 'react-native';
-import COLORS from '../constants/colors';
 
 interface Props {
     children: React.ReactNode;
-    style?: ViewStyle;
+}
+
+interface Props {
+    style: ViewStyle;
 }
 
 const Screen = ({ children, style }: Props) => {

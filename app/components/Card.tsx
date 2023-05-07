@@ -1,11 +1,17 @@
-import { Pressable, StyleSheet, View, Image } from 'react-native';
+import {
+    Pressable,
+    StyleSheet,
+    View,
+    Image,
+    type ImageSourcePropType,
+} from 'react-native';
 import COLORS from '../constants/colors';
 import AppText from './AppText';
 
 interface Props {
     title: string;
     subTitle: string;
-    image: any;
+    image: ImageSourcePropType;
 }
 
 const Card = ({ title, subTitle, image }: Props) => {
@@ -14,8 +20,18 @@ const Card = ({ title, subTitle, image }: Props) => {
             <Pressable>
                 <Image style={styles.image} source={image} />
                 <View style={styles.details}>
-                    <AppText style={styles.title}>{title}</AppText>
-                    <AppText style={styles.subTitle}>{subTitle}</AppText>
+                    <AppText
+                        style={styles.title}
+                        textProps={{ numberOfLines: 1 }}
+                    >
+                        {title}
+                    </AppText>
+                    <AppText
+                        style={styles.subTitle}
+                        textProps={{ numberOfLines: 3 }}
+                    >
+                        {subTitle}
+                    </AppText>
                 </View>
             </Pressable>
         </View>

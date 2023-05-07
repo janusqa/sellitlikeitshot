@@ -1,6 +1,5 @@
 import { type TextInputProps, type ViewStyle } from 'react-native';
 
-import { type MaterialCommunityIcons } from '@expo/vector-icons';
 import {
     Controller,
     useFormContext,
@@ -10,13 +9,10 @@ import {
 
 import ErrorMessage from '../ErrorMessage';
 import AppTextInput from '../AppTextInput';
-
-export type IonIconName = React.ComponentProps<
-    typeof MaterialCommunityIcons
->['name'];
+import { type IconProps } from '../IconButton';
 
 interface Props<T extends FieldValues> extends UseControllerProps<T> {
-    icon?: IonIconName;
+    icon?: IconProps['name'];
     style?: ViewStyle;
     textInputProps?: TextInputProps;
 }

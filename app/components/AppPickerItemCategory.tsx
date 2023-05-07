@@ -14,7 +14,10 @@ export interface Props {
 const AppPickerItem = ({ title, onPress, renderIcon }: Props) => {
     return (
         <Pressable
-            style={({ pressed }) => [pressed && styles.pressed]}
+            style={({ pressed }) => [
+                styles.container,
+                pressed && styles.pressed,
+            ]}
             onPress={onPress}
         >
             {!!renderIcon && renderIcon({ size: 20 } as IconButtonProps)}
@@ -26,10 +29,18 @@ const AppPickerItem = ({ title, onPress, renderIcon }: Props) => {
 export default AppPickerItem;
 
 const styles = StyleSheet.create({
+    container: {
+        paddingHorizontal: 30,
+        paddingVertical: 15,
+        alignItems: 'center',
+        width: '33%',
+    },
     pressed: {
         opacity: 0.7,
     },
     text: {
-        padding: 10,
+        fontSize: 12,
+        fontWeight: 'bold',
+        textAlign: 'center',
     },
 });

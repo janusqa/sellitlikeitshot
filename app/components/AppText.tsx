@@ -1,14 +1,19 @@
-import { Text, type TextStyle } from 'react-native';
+import { Text, type TextProps, type TextStyle } from 'react-native';
 
 import defaultStyles from '../constants/styles';
 
 interface Props {
     children: string;
     style?: TextStyle;
+    textProps?: TextProps;
 }
 
-function AppText({ children, style }: Props) {
-    return <Text style={[defaultStyles.text, style ?? null]}>{children}</Text>;
+function AppText({ children, style, textProps }: Props) {
+    return (
+        <Text style={[defaultStyles.text, style ?? null]} {...textProps}>
+            {children}
+        </Text>
+    );
 }
 
 export default AppText;

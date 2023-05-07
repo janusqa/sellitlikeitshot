@@ -1,4 +1,4 @@
-import { StyleSheet, View, Image } from 'react-native';
+import { StyleSheet, View, Image, type ViewStyle } from 'react-native';
 
 import { z } from 'zod';
 import { type FieldValues } from 'react-hook-form';
@@ -26,13 +26,17 @@ const zFormData = z.object({
 
 export type FormData = z.infer<typeof zFormData>;
 
-const LoginScreen = () => {
+interface Props {
+    style?: ViewStyle;
+}
+
+const LoginScreen = ({ style }: Props) => {
     const onSubmit = (data: FieldValues) => {
         console.log(data);
     };
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, !!style && style]}>
             <Image style={styles.logo} source={logo} />
             <AppForm schema={zFormData}>
                 <AppFormField
@@ -71,7 +75,7 @@ export default LoginScreen;
 
 const styles = StyleSheet.create({
     container: {
-        padding: 20,
+        flex: 1,
     },
     logo: {
         width: 80,
