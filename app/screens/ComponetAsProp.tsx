@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet } from 'react-native';
 import { type ComponentType, type ReactElement } from 'react';
-import { type IconProps } from '../../App';
+import { type IconProps } from '../components/IconButton';
 import React from 'react';
 
 interface MyButtonWithIconElementProps {

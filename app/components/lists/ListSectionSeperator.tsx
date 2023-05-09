@@ -11,6 +11,6 @@ const styles = StyleSheet.create({
     seperator: {
         width: '100%',
         height: 18,
-        backgroundColor: COLORS.lightGray,
+        backgroundColor: COLORS.gray100,
     },
 });

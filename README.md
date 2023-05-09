@@ -101,7 +101,7 @@ add ```"lint": "eslint . --ext .js,.jsx,.ts,.tsx"``` to "scripts" key of package
 
 # Navigation
 $ npm install @react-navigation/native
-$ npx expo install react-native-screens react-native-safe-area-context
+$ npx expo install react-native-screens react-native-safe-area-context react-native-reanimated react-native-gesture-handler
 
 # Native-Stack Navigator
 $ npm install @react-navigation/native-stack

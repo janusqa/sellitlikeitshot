@@ -57,7 +57,7 @@ const AppPicker = ({
                         <MaterialCommunityIcons
                             name={icon}
                             size={20}
-                            color={COLORS.mediumGray}
+                            color={COLORS.gray200}
                             style={styles.icon}
                         />
                     )}
@@ -73,7 +73,7 @@ const AppPicker = ({
                     <MaterialCommunityIcons
                         name="chevron-down"
                         size={20}
-                        color={COLORS.mediumGray}
+                        color={COLORS.gray200}
                     />
                 </View>
             </Pressable>
@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     placeholder: {
-        color: COLORS.mediumGray,
+        color: COLORS.gray300,
     },
     modal: {
         padding: 10,

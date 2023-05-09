@@ -3,8 +3,8 @@ import { SectionList, View, StyleSheet, type ViewStyle } from 'react-native';
 import ListItem, { type ListItemType } from '../components/lists/ListItem';
 import COLORS from '../constants/colors';
 import IconButton from '../components/IconButton';
-import ListItemSeperator from '../components/ListItemSeperator';
-import ListSectionSeperator from '../components/ListSectionSeperator';
+import ListItemSeperator from '../components/lists/ListItemSeperator';
+import ListSectionSeperator from '../components/lists/ListSectionSeperator';
 
 const DATA: { title: string; data: ListItemType[] }[] = [
     {

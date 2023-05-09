@@ -1,7 +1,14 @@
 import type React from 'react';
 import { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, StatusBar as StatusBarRN, Switch } from 'react-native';
+import {
+    StyleSheet,
+    StatusBar as StatusBarRN,
+    Switch,
+    Alert,
+    Button,
+    Image,
+} from 'react-native';
 import Screen from './app/components/Screen';
 import WelcomeScreen from './app/screens/WelcomeScreen';
 import ViewImageScreen from './app/screens/ViewImageScreen';
@@ -28,6 +35,9 @@ import {
 } from './app/screens/ComponetAsProp';
 import { IconProps } from './app/components/IconButton';
 
+import ImageInput from './app/components/ImageInput';
+import ImageInputList from './app/components/ImageInputList';
+
 const categories = [
     {
         title: 'Furniture',
@@ -45,8 +55,10 @@ const categories = [
 
 const App = () => {
     return (
-        <Screen style={{ backgroundColor: COLORS.lightGray }}>
-            <ListingEditScreen />
+        <Screen>
+            <ListingEditScreen
+                style={{ backgroundColor: COLORS.gray100, padding: 20 }}
+            />
         </Screen>
     );
 };

@@ -1,7 +1,6 @@
-import { StyleSheet, View, type ViewStyle } from 'react-native';
+import { StyleSheet, ScrollView, type ViewStyle, View } from 'react-native';
 
 import { z } from 'zod';
-import { type FieldValues } from 'react-hook-form';
 
 import COLORS from '../constants/colors';
 import {
@@ -13,6 +12,9 @@ import {
 import IconButton from '../components/IconButton';
 import { type Item } from '../components/AppPicker';
 import AppPickerItemCategory from '../components/AppPickerItemCategory';
+import AppFormImagePicker from '../components/forms/AppFormImagePicker';
+import { type FieldValues } from 'react-hook-form';
+import useLocation from '../hooks/useLocation';
 
 const items: Item[] = [
     {
@@ -83,70 +85,100 @@ const zFormData = z.object({
         const processed = z.string().transform(Number).safeParse(arg);
         return processed.success ? processed.data : arg;
     }, z.number({ required_error: 'Price is required', invalid_type_error: 'Price field is a required' }).min(1, { message: 'Price must be greater than 0' }).max(10000, { message: 'Price must be less than 10000' })),
-
     description: z.string().optional(),
-    category: z.object({ label: z.enum(categories), value: z.number() }),
+    category: z.object({
+        label: z.enum(categories),
+        value: z.number(),
+        color: z.string().optional(),
+        icon: z.string().optional(),
+    }),
+    images: z.array(z.string()).min(1, { message: 'Please select an image' }),
 });
 
+const zLocation = z.object(
+    {
+        lat: z.number().min(-90).max(90),
+        lng: z.number().min(-180).max(180),
+    },
+    { required_error: 'Could not determine your location' }
+);
+
 export type FormData = z.infer<typeof zFormData>;
+
+const defaultValues = {
+    images: [] as FormData['images'],
+};
 
 interface Props {
     style?: ViewStyle;
 }
 
 const ListingEditScreen = ({ style }: Props) => {
-    const onSubmit = (data: FieldValues) => console.log(data);
+    const userLocation = useLocation();
+
+    const onSubmit = (data: FieldValues) => {
+        console.log(data);
+        console.log(userLocation);
+    };
     return (
-        <View style={[styles.container, !!style && style]}>
-            <AppForm schema={zFormData}>
-                <AppFormField
-                    name="title"
-                    textInputProps={{ placeholder: 'Title', maxLength: 255 }}
-                />
-                <AppFormField
-                    name="price"
-                    textInputProps={{
-                        placeholder: 'Price',
-                        maxLength: 8,
-                        keyboardType: 'numeric',
-                    }}
-                />
-                <AppFormPicker
-                    name="category"
-                    items={items}
-                    placeholder="Category"
-                    numColumns={3}
-                    renderPickerItemComponent={(pickerSettings) => (
-                        <AppPickerItemCategory
-                            {...pickerSettings}
-                            renderIcon={(iconSettings) => (
-                                <IconButton
-                                    {...iconSettings}
-                                    name={pickerSettings.icon?.name ?? 'blank'}
-                                    color={pickerSettings.icon?.color}
-                                    size={50}
-                                    onPress={pickerSettings.onPress}
-                                />
-                            )}
-                        />
-                    )}
-                />
-                <AppFormField
-                    name="description"
-                    textInputProps={{
-                        placeholder: 'Description',
-                        multiline: true,
-                        numberOfLines: 3,
-                        maxLength: 255,
-                    }}
-                />
-                <AppFormSubmit
-                    title="Post"
-                    color={COLORS.primary}
-                    onSubmit={onSubmit}
-                />
-            </AppForm>
-        </View>
+        <ScrollView style={[styles.container, !!style && style]}>
+            <View>
+                <AppForm schema={zFormData} defaultValues={defaultValues}>
+                    <AppFormImagePicker name="images" />
+                    <AppFormField
+                        name="title"
+                        textInputProps={{
+                            placeholder: 'Title',
+                            maxLength: 255,
+                        }}
+                    />
+                    <AppFormField
+                        name="price"
+                        textInputProps={{
+                            placeholder: 'Price',
+                            maxLength: 8,
+                            keyboardType: 'numeric',
+                        }}
+                    />
+                    <AppFormPicker
+                        name="category"
+                        items={items}
+                        placeholder="Category"
+                        numColumns={3}
+                        renderPickerItemComponent={(pickerSettings) => (
+                            <AppPickerItemCategory
+                                {...pickerSettings}
+                                renderIcon={(iconSettings) => (
+                                    <IconButton
+                                        {...iconSettings}
+                                        name={
+                                            pickerSettings.icon?.name ?? 'blank'
+                                        }
+                                        color={pickerSettings.icon?.color}
+                                        size={50}
+                                        onPress={pickerSettings.onPress}
+                                    />
+                                )}
+                            />
+                        )}
+                    />
+                    <AppFormField
+                        name="description"
+                        textInputProps={{
+                            placeholder: 'Description',
+                            multiline: true,
+                            numberOfLines: 3,
+                            maxLength: 255,
+                        }}
+                    />
+                    <AppFormSubmit
+                        title="Post"
+                        color={COLORS.primary}
+                        onSubmit={onSubmit}
+                    />
+                </AppForm>
+            </View>
+        </ScrollView>
     );
 };
 

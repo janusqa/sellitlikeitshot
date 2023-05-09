@@ -80,7 +80,7 @@ const ListItem = ({
                         )}
                     </View>
                     <MaterialCommunityIcons
-                        color={COLORS.mediumGray}
+                        color={COLORS.gray200}
                         name="chevron-right"
                         size={25}
                     />
@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.white,
     },
     pressed: {
-        backgroundColor: COLORS.lightGray,
+        backgroundColor: COLORS.gray100,
     },
     image: {
         width: 70,
@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
     },
     subTitle: {
-        color: COLORS.mediumGray,
+        color: COLORS.gray200,
         fontSize: 14,
     },
 });

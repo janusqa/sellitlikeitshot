@@ -17,7 +17,7 @@ interface Props<T extends FieldValues> extends UseControllerProps<T> {
     textInputProps?: TextInputProps;
 }
 
-const AppFormField = <T extends FieldValues>({
+const AppFormTextInputField = <T extends FieldValues>({
     name,
     icon,
     style,
@@ -51,4 +51,4 @@ const AppFormField = <T extends FieldValues>({
     );
 };
 
-export default AppFormField;
+export default AppFormTextInputField;

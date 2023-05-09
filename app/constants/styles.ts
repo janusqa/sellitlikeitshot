@@ -5,7 +5,7 @@ import COLORS from './colors';
 export default {
     text: {
         fontSize: 18,
-        color: COLORS.darkGray,
+        color: COLORS.gray400,
         fontFamily: Platform.OS === 'android' ? 'Roboto' : 'Avenir',
     },
 };

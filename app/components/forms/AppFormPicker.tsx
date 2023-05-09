@@ -1,5 +1,3 @@
-import { type ViewStyle } from 'react-native';
-
 import {
     useFormContext,
     type FieldValues,
@@ -15,7 +13,6 @@ import { type IconProps } from '../IconButton';
 interface Props<T extends FieldValues> extends UseControllerProps<T> {
     icon?: IconProps['name'];
     placeholder: string;
-    style?: ViewStyle;
     items: Item[];
     numColumns?: number;
     renderPickerItemComponent: (
@@ -29,7 +26,6 @@ const AppFormPicker = <T extends FieldValues>({
     ...otherProps
 }: Props<T>) => {
     const {
-        setValue,
         control,
         formState: { errors },
     } = useFormContext();
@@ -39,13 +35,13 @@ const AppFormPicker = <T extends FieldValues>({
             <Controller
                 control={control}
                 name={name}
-                render={({ field: { value } }) => (
+                render={({ field: { value, onChange } }) => (
                     <AppPicker
                         {...otherProps}
                         renderPickerItemComponent={renderPickerItemComponent}
                         selectedItem={value}
                         onSelectItem={(item) => {
-                            setValue(name, item);
+                            onChange(item);
                         }}
                     />
                 )}

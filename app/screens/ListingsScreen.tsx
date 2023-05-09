@@ -1,4 +1,9 @@
-import { StyleSheet, View, type ViewStyle } from 'react-native';
+import {
+    type ImageSourcePropType,
+    StyleSheet,
+    View,
+    type ViewStyle,
+} from 'react-native';
 import { FlatList } from 'react-native';
 import Card from '../components/Card';
 
@@ -31,7 +36,7 @@ const ListingsScreen = ({ style }: Props) => {
                     <Card
                         title={item.title}
                         subTitle={`$${item.price.toString()}`}
-                        image={item.image}
+                        image={item.image as ImageSourcePropType}
                     />
                 )}
             />
