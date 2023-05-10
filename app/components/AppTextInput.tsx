@@ -33,7 +33,7 @@ const AppTextInput = ({ icon, style, textInputProps }: Props) => {
                 <TextInput
                     style={defaultStyles.text}
                     {...textInputProps}
-                    placeholderTextColor={COLORS.gray300}
+                    placeholderTextColor={COLORS.gray400}
                 />
             </View>
         </>
@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
         width: '100%',
         padding: 15,
         marginVertical: 10,
-        backgroundColor: COLORS.white,
+        backgroundColor: COLORS.gray100,
         borderRadius: 25,
         alignItems: 'center',
     },

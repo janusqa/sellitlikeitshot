@@ -11,8 +11,8 @@ const DATA: { title: string; data: ListItemType[] }[] = [
         title: '',
         data: [
             {
-                title: 'Mosh Hamedani',
-                subTitle: 'programmingwithmosh@gmail.com',
+                title: 'Janus QA',
+                subTitle: 'janusqa@rn.com',
                 image: require('../assets/mosh.jpg'),
             },
         ],
@@ -81,7 +81,7 @@ interface Props {
     style?: ViewStyle;
 }
 
-const AccountsScreen = ({ style }: Props) => {
+const AccountScreen = ({ style }: Props) => {
     return (
         <View style={[styles.container, !!style && style]}>
             <SectionList
@@ -104,7 +104,7 @@ const AccountsScreen = ({ style }: Props) => {
     );
 };
 
-export default AccountsScreen;
+export default AccountScreen;
 
 const styles = StyleSheet.create({
     container: {

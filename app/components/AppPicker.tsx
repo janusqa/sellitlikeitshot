@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
         width: '100%',
         padding: 15,
         marginVertical: 10,
-        backgroundColor: COLORS.white,
+        backgroundColor: COLORS.gray100,
         borderRadius: 25,
         alignItems: 'center',
     },
@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     placeholder: {
-        color: COLORS.gray300,
+        color: COLORS.gray400,
     },
     modal: {
         padding: 10,

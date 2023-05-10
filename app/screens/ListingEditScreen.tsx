@@ -1,4 +1,10 @@
-import { StyleSheet, ScrollView, type ViewStyle, View } from 'react-native';
+import {
+    StyleSheet,
+    ScrollView,
+    type ViewStyle,
+    View,
+    Text,
+} from 'react-native';
 
 import { z } from 'zod';
 
@@ -7,7 +13,7 @@ import {
     AppFormPicker,
     AppForm,
     AppFormSubmit,
-    AppFormField,
+    AppFormTextIputField,
 } from '../components/forms';
 import IconButton from '../components/IconButton';
 import { type Item } from '../components/AppPicker';
@@ -121,18 +127,18 @@ const ListingEditScreen = ({ style }: Props) => {
         console.log(userLocation);
     };
     return (
-        <ScrollView style={[styles.container, !!style && style]}>
-            <View>
+        <View style={styles.container}>
+            <ScrollView style={[!!style && style]}>
                 <AppForm schema={zFormData} defaultValues={defaultValues}>
                     <AppFormImagePicker name="images" />
-                    <AppFormField
+                    <AppFormTextIputField
                         name="title"
                         textInputProps={{
                             placeholder: 'Title',
                             maxLength: 255,
                         }}
                     />
-                    <AppFormField
+                    <AppFormTextIputField
                         name="price"
                         textInputProps={{
                             placeholder: 'Price',
@@ -162,7 +168,7 @@ const ListingEditScreen = ({ style }: Props) => {
                             />
                         )}
                     />
-                    <AppFormField
+                    <AppFormTextIputField
                         name="description"
                         textInputProps={{
                             placeholder: 'Description',
@@ -177,8 +183,8 @@ const ListingEditScreen = ({ style }: Props) => {
                         onSubmit={onSubmit}
                     />
                 </AppForm>
-            </View>
-        </ScrollView>
+            </ScrollView>
+        </View>
     );
 };
 
@@ -187,5 +193,6 @@ export default ListingEditScreen;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        padding: 20,
     },
 });

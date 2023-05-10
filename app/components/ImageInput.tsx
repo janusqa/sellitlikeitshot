@@ -92,7 +92,7 @@ export default ImageInput;
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: COLORS.white,
+        backgroundColor: COLORS.gray100,
         borderRadius: 15,
         height: 100,
         width: 100,

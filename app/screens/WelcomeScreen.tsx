@@ -11,14 +11,19 @@ import backgroundImage from '../assets/background.jpg';
 import logo from '../assets/logo-red.png';
 import COLORS from '../constants/colors';
 import AppButton from '../components/AppButton';
+import { type AuthNavScreenProps } from '../navigation/navigation';
 
-interface Props {
-    style?: ViewStyle;
-}
-
-const WelcomeScreen = ({ style }: Props) => {
+const WelcomeScreen = ({
+    route,
+    navigation,
+}: AuthNavScreenProps<'Welcome'>) => {
     return (
-        <View style={[styles.container, !!style && style]}>
+        <View
+            style={[
+                styles.container,
+                !!route.params?.style && route.params.style,
+            ]}
+        >
             <ImageBackground
                 blurRadius={10}
                 style={styles.background}
@@ -34,12 +39,12 @@ const WelcomeScreen = ({ style }: Props) => {
                     <AppButton
                         title="login"
                         color={COLORS.primary}
-                        onPress={() => console.log('login')}
+                        onPress={() => navigation.navigate('Login')}
                     />
                     <AppButton
                         title="register"
                         color={COLORS.secondary}
-                        onPress={() => console.log('register')}
+                        onPress={() => navigation.navigate('Register')}
                     />
                 </View>
             </ImageBackground>

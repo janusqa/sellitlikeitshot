@@ -114,10 +114,10 @@ const styles = StyleSheet.create({
     },
     title: {
         fontWeight: 'bold',
-        fontSize: 14,
+        fontSize: 18,
     },
     subTitle: {
-        color: COLORS.gray200,
-        fontSize: 14,
+        color: COLORS.gray300,
+        fontSize: 16,
     },
 });

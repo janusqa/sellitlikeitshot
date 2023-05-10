@@ -6,7 +6,7 @@ import { type ZodSchema } from 'zod';
 interface Props {
     schema: ZodSchema;
     children: React.ReactNode;
-    defaultValues: unknown;
+    defaultValues?: unknown;
 }
 
 const AppForm = ({ schema, children, defaultValues }: Props) => {
