@@ -99,6 +99,13 @@ add ```"lint": "eslint . --ext .js,.jsx,.ts,.tsx"``` to "scripts" key of package
 }
 ```
 
+# Debugging
+Add "jsEngine": "jsc" to app.json and restart expo in vscode and emulator
+Install the stand alone react-native-debuger.  In it click on "Debugger" menu and "New window"
+enter port that metro is running on, mostly it is 19000
+then click "m" in terminal to lanch dev menu on emulator.
+"Debug Remote JS" should now be visible. click it to connect to react-native-debugger
+
 # Navigation
 $ npm install @react-navigation/native
 $ npx expo install react-native-screens react-native-safe-area-context react-native-reanimated react-native-gesture-handler @react-native-masked-view/masked-view
@@ -231,3 +238,20 @@ $ npx expo install react-native-gesture-handler
 
 # Forms
 npm i zod react-hook-form @hookform/resolvers
+
+# React-Query
+npm i  npm i @tanstack/react-query 
+npx expo install @react-native-community/netinfo
+
+# Loading animations
+npx expo install lottie-react-native
+https://lottiefiles.com   <- get nice loading animations here. Download as json file then load
+with package above
+
+# Progress bars 
+-- these provides animations for progress bars for uploading/downloading etc
+-- a good example is to use it with axios progress feature.  See useAddListing.ts and istingEditScreen.tsx
+npm install react-natinve-progress
+
+# Offline Startegies
+See offline_strategies.png in root folder

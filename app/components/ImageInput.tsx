@@ -43,9 +43,7 @@ const ImageInput = ({ imageUri, onChangeImage }: Props) => {
                     quality: 0.5,
                     base64: true,
                 });
-                if (!result.canceled) {
-                    onChangeImage(result.assets[0].uri);
-                }
+                if (!result.canceled) onChangeImage(result.assets[0].uri);
             } catch (error) {
                 const message =
                     error instanceof Error

@@ -1,8 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
 import { Button, Text } from 'react-native';
-import Screen from '../app/components/Screen';
-
-import COLORS from '../app/constants/colors';
 
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
@@ -48,8 +45,8 @@ const StackNavigator = () => (
     <Stack.Navigator
         initialRouteName="Tweets"
         screenOptions={{
-            headerStyle: { backgroundColor: COLORS.primary },
-            headerTintColor: COLORS.white,
+            headerStyle: { backgroundColor: 'white' },
+            headerTintColor: 'white',
         }}
     >
         <Stack.Screen
@@ -74,10 +71,10 @@ const TabNavigator = () => (
     <Tab.Navigator
         initialRouteName="Feed"
         screenOptions={{
-            tabBarActiveBackgroundColor: COLORS.primary,
-            tabBarActiveTintColor: COLORS.white,
-            tabBarInactiveBackgroundColor: COLORS.gray100,
-            tabBarInactiveTintColor: COLORS.black,
+            tabBarActiveBackgroundColor: 'white',
+            tabBarActiveTintColor: 'white',
+            tabBarInactiveBackgroundColor: 'white',
+            tabBarInactiveTintColor: 'white',
         }}
     >
         <Tab.Screen
@@ -100,12 +97,10 @@ const TabNavigator = () => (
 const App = () => {
     return (
         <>
-            <StatusBar style="light" backgroundColor={COLORS.primary} />
-            <Screen>
-                <NavigationContainer>
-                    <TabNavigator />
-                </NavigationContainer>
-            </Screen>
+            <StatusBar style="light" backgroundColor="white" />
+            <NavigationContainer>
+                <TabNavigator />
+            </NavigationContainer>
         </>
     );
 };

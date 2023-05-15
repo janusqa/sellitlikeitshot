@@ -20,23 +20,21 @@ interface Props {
 
 const AppTextInput = ({ icon, style, textInputProps }: Props) => {
     return (
-        <>
-            <View style={[styles.container, !!style && style]}>
-                {icon && (
-                    <MaterialCommunityIcons
-                        name={icon}
-                        size={20}
-                        color={COLORS.gray200}
-                        style={styles.icon}
-                    />
-                )}
-                <TextInput
-                    style={defaultStyles.text}
-                    {...textInputProps}
-                    placeholderTextColor={COLORS.gray400}
+        <View style={[styles.container, !!style && style]}>
+            {icon && (
+                <MaterialCommunityIcons
+                    name={icon}
+                    size={20}
+                    color={COLORS.gray200}
+                    style={styles.icon}
                 />
-            </View>
-        </>
+            )}
+            <TextInput
+                style={defaultStyles.text}
+                {...textInputProps}
+                placeholderTextColor={COLORS.gray400}
+            />
+        </View>
     );
 };
 

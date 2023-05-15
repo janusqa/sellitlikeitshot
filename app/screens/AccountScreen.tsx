@@ -1,10 +1,11 @@
-import { SectionList, View, StyleSheet, type ViewStyle } from 'react-native';
+import { SectionList, View, StyleSheet } from 'react-native';
 
 import ListItem, { type ListItemType } from '../components/lists/ListItem';
 import COLORS from '../constants/colors';
 import IconButton from '../components/IconButton';
 import ListItemSeperator from '../components/lists/ListItemSeperator';
 import ListSectionSeperator from '../components/lists/ListSectionSeperator';
+import { type AccountNavCompositeScreenProps } from '../navigation/navigation';
 
 const DATA: { title: string; data: ListItemType[] }[] = [
     {
@@ -38,6 +39,7 @@ const DATA: { title: string; data: ListItemType[] }[] = [
             },
             {
                 title: 'My Messages',
+                targetScreen: 'Messages',
                 icon: {
                     name: 'email',
                     size: 20,
@@ -77,16 +79,16 @@ const DATA: { title: string; data: ListItemType[] }[] = [
     },
 ];
 
-interface Props {
-    style?: ViewStyle;
-}
-
-const AccountScreen = ({ style }: Props) => {
+const AccountScreen = ({
+    route,
+    navigation,
+}: AccountNavCompositeScreenProps<'Account'>) => {
+    const style = route.params?.style;
     return (
         <View style={[styles.container, !!style && style]}>
             <SectionList
                 sections={DATA}
-                keyExtractor={(item, index) => index.toString()}
+                keyExtractor={(item) => item.title}
                 renderItem={({ item }) => (
                     <ListItem
                         title={item.title}
@@ -94,6 +96,11 @@ const AccountScreen = ({ style }: Props) => {
                         image={item.image}
                         IconComponent={
                             item.icon ? <IconButton {...item.icon} /> : null
+                        }
+                        onPress={
+                            item.targetScreen
+                                ? () => navigation.navigate(item.targetScreen)
+                                : undefined
                         }
                     />
                 )}

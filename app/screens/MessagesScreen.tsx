@@ -3,13 +3,13 @@ import {
     FlatList,
     StyleSheet,
     type ImageSourcePropType,
-    type ViewStyle,
 } from 'react-native';
 import { useState } from 'react';
 
 import ListItem from '../components/lists/ListItem';
 import ListItemSeperator from '../components/lists/ListItemSeperator';
 import ListItemDeleteAction from '../components/lists/ListItemDeleteAction';
+import { type AccountNavCompositeScreenProps } from '../navigation/navigation';
 
 interface MessageType {
     id: number;
@@ -35,11 +35,10 @@ const initialMessages = [
     },
 ];
 
-interface Props {
-    style?: ViewStyle;
-}
-
-const MessagesScreen = ({ style }: Props) => {
+const MessagesScreen = ({
+    route,
+}: AccountNavCompositeScreenProps<'Messages'>) => {
+    const style = route.params?.style;
     const [messages, setMessages] = useState<MessageType[]>(initialMessages);
     const [refreshing] = useState<boolean>(false);
 

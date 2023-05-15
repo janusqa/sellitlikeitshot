@@ -2,15 +2,17 @@ import { StyleSheet, Text, Pressable, type ColorValue } from 'react-native';
 
 import COLORS from '../constants/colors';
 
-interface Props {
+export interface Props {
     title: string;
     color: ColorValue;
-    onPress: () => void;
+    onPress: () => Promise<void> | void;
+    disabled?: boolean;
 }
 
-const AppButton = ({ title, color, onPress }: Props) => {
+const AppButton = ({ title, color, onPress, disabled = false }: Props) => {
     return (
         <Pressable
+            disabled={disabled}
             onPress={onPress}
             style={({ pressed }) => [
                 styles.button,

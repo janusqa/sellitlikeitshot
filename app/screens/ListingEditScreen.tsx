@@ -1,17 +1,13 @@
-import {
-    StyleSheet,
-    ScrollView,
-    type ViewStyle,
-    View,
-    Text,
-} from 'react-native';
+import { StyleSheet, ScrollView, View } from 'react-native';
+import { useState } from 'react';
 
 import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm, FormProvider } from 'react-hook-form';
 
 import COLORS from '../constants/colors';
 import {
     AppFormPicker,
-    AppForm,
     AppFormSubmit,
     AppFormTextIputField,
 } from '../components/forms';
@@ -19,8 +15,11 @@ import IconButton from '../components/IconButton';
 import { type Item } from '../components/AppPicker';
 import AppPickerItemCategory from '../components/AppPickerItemCategory';
 import AppFormImagePicker from '../components/forms/AppFormImagePicker';
-import { type FieldValues } from 'react-hook-form';
 import useLocation from '../hooks/useLocation';
+import { type AppNavScreenProps } from '../navigation/navigation';
+import useAddListing from '../hooks/useAddListing';
+import LoadingIndicator from '../components/LoadingIndicator';
+import ErrorFallBack from '../components/ErrorFallback';
 
 const items: Item[] = [
     {
@@ -85,12 +84,21 @@ const categories: [CATEGORY, ...CATEGORY[]] = [
     ...items.filter((item, idx) => idx !== 0).map((item) => item.label),
 ];
 
-const zFormData = z.object({
-    title: z.string({ required_error: 'Title is required' }),
-    price: z.preprocess((arg) => {
-        const processed = z.string().transform(Number).safeParse(arg);
-        return processed.success ? processed.data : arg;
-    }, z.number({ required_error: 'Price is required', invalid_type_error: 'Price field is a required' }).min(1, { message: 'Price must be greater than 0' }).max(10000, { message: 'Price must be less than 10000' })),
+const FormInput = z.object({
+    title: z
+        .string({ required_error: 'Title is required' })
+        .min(1, { message: 'Title is required' }),
+    price: z.coerce
+        .number({
+            required_error: 'Price is required',
+            invalid_type_error: 'Price field is a required',
+        })
+        .min(1, { message: 'Price must be greater than 0' })
+        .max(10000, { message: 'Price must be less than 10000' }),
+    // price: z.preprocess((arg) => {
+    //     const processed = z.string().transform(Number).safeParse(arg);
+    //     return processed.success ? processed.data : arg;
+    // }, z.number({ required_error: 'Price is required', invalid_type_error: 'Price field is a required' }).min(1, { message: 'Price must be greater than 0' }).max(10000, { message: 'Price must be less than 10000' })),
     description: z.string().optional(),
     category: z.object({
         label: z.enum(categories),
@@ -98,38 +106,95 @@ const zFormData = z.object({
         color: z.string().optional(),
         icon: z.string().optional(),
     }),
-    images: z.array(z.string()).min(1, { message: 'Please select an image' }),
+    images: z.array(z.string()).nonempty({ message: 'Please select an image' }),
 });
 
-const zLocation = z.object(
+const Location = z.object(
     {
-        lat: z.number().min(-90).max(90),
-        lng: z.number().min(-180).max(180),
+        latitude: z.number().min(-90).max(90),
+        longitude: z.number().min(-180).max(180),
     },
     { required_error: 'Could not determine your location' }
 );
 
-export type FormData = z.infer<typeof zFormData>;
+export type FormInput = z.infer<typeof FormInput>;
+export type LocationInput = z.infer<typeof Location>;
 
 const defaultValues = {
-    images: [] as FormData['images'],
+    title: '',
+    description: '',
+    category: { label: 'Category', value: 0, color: '', icon: '' },
+    images: [] as string[],
 };
 
-interface Props {
-    style?: ViewStyle;
-}
+const ListingEditScreen = ({ route }: AppNavScreenProps<'ListingEdit'>) => {
+    const [progress, setProgress] = useState<number>(0);
+    const [complete, setComplete] = useState<boolean>(true);
 
-const ListingEditScreen = ({ style }: Props) => {
+    const style = route.params?.style;
     const userLocation = useLocation();
+    const reactHookForm = useForm<FormInput>({
+        resolver: zodResolver(FormInput),
+        defaultValues,
+    });
 
-    const onSubmit = (data: FieldValues) => {
-        console.log(data);
-        console.log(userLocation);
+    const onAdd = () => {
+        setProgress(0);
+        reactHookForm.reset(defaultValues);
     };
+    const onProgress = (progress: number) => setProgress(progress);
+    const onComplete = () => setComplete(true);
+
+    const addListing = useAddListing({ onAdd, onProgress });
+
+    const onSubmit = (data: FormInput) => {
+        const listing = new FormData();
+        listing.append('title', data.title);
+        listing.append('price', data.price.toString());
+        listing.append('categoryId', data.category.value.toString());
+        listing.append('description', data.description ?? '');
+        data.images.forEach((imageUri) => {
+            listing.append('images', {
+                name: imageUri.split('/').pop(),
+                type: 'image/jpeg',
+                uri: imageUri,
+            } as unknown as File);
+        });
+        const geoLocation = Location.safeParse(userLocation);
+        if (geoLocation.success)
+            listing.append('location', JSON.stringify(geoLocation.data));
+
+        setComplete(false);
+        addListing.mutate(listing);
+    };
+
+    if (addListing.isError) {
+        return (
+            <ErrorFallBack
+                error={addListing.error}
+                buttonTitle="Close"
+                visible={addListing.isError}
+                onPress={() => {
+                    setComplete(true);
+                    addListing.reset();
+                }}
+            />
+        );
+    }
+
+    if (!complete)
+        return (
+            <LoadingIndicator
+                progress={progress}
+                visible={!complete}
+                onComplete={onComplete}
+            />
+        );
+
     return (
         <View style={styles.container}>
             <ScrollView style={[!!style && style]}>
-                <AppForm schema={zFormData} defaultValues={defaultValues}>
+                <FormProvider {...reactHookForm}>
                     <AppFormImagePicker name="images" />
                     <AppFormTextIputField
                         name="title"
@@ -178,11 +243,12 @@ const ListingEditScreen = ({ style }: Props) => {
                         }}
                     />
                     <AppFormSubmit
-                        title="Post"
+                        disabled={addListing.isLoading}
+                        title={addListing.isLoading ? 'Posting...' : 'Post'}
                         color={COLORS.primary}
-                        onSubmit={onSubmit}
+                        onSubmit={reactHookForm.handleSubmit(onSubmit)}
                     />
-                </AppForm>
+                </FormProvider>
             </ScrollView>
         </View>
     );

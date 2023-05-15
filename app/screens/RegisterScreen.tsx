@@ -1,16 +1,14 @@
-import { StyleSheet, View, type ViewStyle } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import z from 'zod';
-import {
-    AppForm,
-    AppFormTextIputField,
-    AppFormSubmit,
-} from '../components/forms';
+import { AppFormTextIputField, AppFormSubmit } from '../components/forms';
 import { REGEX_PWD } from '../constants/validation';
 import COLORS from '../constants/colors';
-import { type FieldValues } from 'react-hook-form';
+import { useForm, FormProvider } from 'react-hook-form';
+import { type AuthNavScreenProps } from '../navigation/navigation';
+import { zodResolver } from '@hookform/resolvers/zod';
 
-const zFormData = z.object({
+const zFormInput = z.object({
     name: z.string({
         required_error: 'Name is required',
     }),
@@ -29,19 +27,20 @@ const zFormData = z.object({
         ),
 });
 
-export type FormData = z.infer<typeof zFormData>;
+export type FormInput = z.infer<typeof zFormInput>;
 
-interface Props {
-    style?: ViewStyle;
-}
+const RegisterScreen = ({ route }: AuthNavScreenProps<'Register'>) => {
+    const style = route.params?.style;
+    const reactHookForm = useForm<FormInput>({
+        resolver: zodResolver(zFormInput),
+    });
 
-const RegisterScreen = ({ style }: Props) => {
-    const onSubmit = (data: FieldValues) => {
+    const onSubmit = (data: FormInput) => {
         console.log(data);
     };
     return (
         <View style={[styles.container, !!style && style]}>
-            <AppForm schema={zFormData}>
+            <FormProvider {...reactHookForm}>
                 <AppFormTextIputField
                     icon="account"
                     name="name"
@@ -75,9 +74,9 @@ const RegisterScreen = ({ style }: Props) => {
                 <AppFormSubmit
                     title="Register"
                     color={COLORS.primary}
-                    onSubmit={onSubmit}
+                    onSubmit={reactHookForm.handleSubmit(onSubmit)}
                 />
-            </AppForm>
+            </FormProvider>
         </View>
     );
 };

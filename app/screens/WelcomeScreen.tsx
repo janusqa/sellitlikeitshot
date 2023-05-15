@@ -1,11 +1,4 @@
-import {
-    View,
-    Text,
-    Image,
-    StyleSheet,
-    ImageBackground,
-    type ViewStyle,
-} from 'react-native';
+import { View, Text, Image, StyleSheet, ImageBackground } from 'react-native';
 
 import backgroundImage from '../assets/background.jpg';
 import logo from '../assets/logo-red.png';

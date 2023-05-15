@@ -27,6 +27,7 @@ export interface ListItemType {
         color: string;
         style: ViewStyle;
     };
+    targetScreen?: string;
 }
 
 interface Props {
@@ -54,7 +55,7 @@ const ListItem = ({
                         styles.container,
                         pressed && styles.pressed,
                     ]}
-                    onPress={onPress}
+                    onPress={onPress ?? null}
                 >
                     {IconComponent && IconComponent}
                     {image && <Image style={styles.image} source={image} />}

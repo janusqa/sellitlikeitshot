@@ -1,18 +1,16 @@
-import { StyleSheet, View, Image, type ViewStyle } from 'react-native';
+import { StyleSheet, View, Image } from 'react-native';
 
 import { z } from 'zod';
-import { type FieldValues } from 'react-hook-form';
+import { useForm, FormProvider } from 'react-hook-form';
 
 import logo from '../assets/logo-red.png';
 import COLORS from '../constants/colors';
 import { REGEX_PWD } from '../constants/validation';
-import {
-    AppFormTextIputField,
-    AppFormSubmit,
-    AppForm,
-} from '../components/forms';
+import { AppFormTextIputField, AppFormSubmit } from '../components/forms';
+import { type AuthNavScreenProps } from '../navigation/navigation';
+import { zodResolver } from '@hookform/resolvers/zod';
 
-const zFormData = z.object({
+const zFormInput = z.object({
     email: z
         .string({
             required_error: 'Email is required',
@@ -28,21 +26,22 @@ const zFormData = z.object({
         ),
 });
 
-export type FormData = z.infer<typeof zFormData>;
+export type FormInput = z.infer<typeof zFormInput>;
 
-interface Props {
-    style?: ViewStyle;
-}
+const LoginScreen = ({ route }: AuthNavScreenProps<'Login'>) => {
+    const style = route.params?.style;
+    const reactHookForm = useForm<FormInput>({
+        resolver: zodResolver(zFormInput),
+    });
 
-const LoginScreen = ({ style }: Props) => {
-    const onSubmit = (data: FieldValues) => {
+    const onSubmit = (data: FormInput) => {
         console.log(data);
     };
 
     return (
         <View style={[styles.container, !!style && style]}>
             <Image style={styles.logo} source={logo} />
-            <AppForm schema={zFormData}>
+            <FormProvider {...reactHookForm}>
                 <AppFormTextIputField
                     name="email"
                     icon="email"
@@ -68,9 +67,9 @@ const LoginScreen = ({ style }: Props) => {
                 <AppFormSubmit
                     title="Login"
                     color={COLORS.primary}
-                    onSubmit={onSubmit}
+                    onSubmit={reactHookForm.handleSubmit(onSubmit)}
                 />
-            </AppForm>
+            </FormProvider>
         </View>
     );
 };

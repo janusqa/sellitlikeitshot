@@ -33,10 +33,17 @@ const AppFormTextInputField = <T extends FieldValues>({
             <Controller
                 control={control}
                 name={name}
-                render={({ field: { value, onChange, onBlur } }) => (
+                render={({
+                    field: { value, onChange, onBlur },
+                    fieldState: { error },
+                }) => (
                     <AppTextInput
                         icon={icon}
-                        style={style}
+                        style={
+                            !!error
+                                ? { ...style, backgroundColor: 'pink' }
+                                : style
+                        }
                         textInputProps={{
                             ...textInputProps,
                             value: value,

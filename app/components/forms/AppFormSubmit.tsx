@@ -1,23 +1,21 @@
 import { type ColorValue } from 'react-native';
 
-import { type FieldValues, useFormContext } from 'react-hook-form';
-
 import AppButton from '../AppButton';
 
 interface Props {
     title: string;
     color: ColorValue;
-    onSubmit: (data: FieldValues) => void;
+    onSubmit: () => void;
+    disabled?: boolean;
 }
 
-const AppFormSubmit = ({ title, color, onSubmit }: Props) => {
-    const { handleSubmit } = useFormContext();
-
+const AppFormSubmit = ({ title, color, onSubmit, disabled = false }: Props) => {
     return (
         <AppButton
             title={title}
             color={color}
-            onPress={handleSubmit(onSubmit)}
+            onPress={onSubmit}
+            disabled={disabled}
         />
     );
 };

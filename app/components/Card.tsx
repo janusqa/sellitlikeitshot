@@ -1,24 +1,19 @@
-import {
-    Pressable,
-    StyleSheet,
-    View,
-    Image,
-    type ImageSourcePropType,
-} from 'react-native';
+import { Pressable, StyleSheet, View, Image } from 'react-native';
 import COLORS from '../constants/colors';
 import AppText from './AppText';
 
 interface Props {
     title: string;
     subTitle: string;
-    image: ImageSourcePropType;
+    image: string;
+    onPress: () => void;
 }
 
-const Card = ({ title, subTitle, image }: Props) => {
+const Card = ({ title, subTitle, image, onPress }: Props) => {
     return (
         <View style={styles.container}>
-            <Pressable>
-                <Image style={styles.image} source={image} />
+            <Pressable onPress={onPress}>
+                <Image style={styles.image} source={{ uri: image }} />
                 <View style={styles.details}>
                     <AppText
                         style={styles.title}

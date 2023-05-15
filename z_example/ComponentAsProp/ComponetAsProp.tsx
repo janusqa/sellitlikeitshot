@@ -1,7 +1,9 @@
 import { View, Text, StyleSheet } from 'react-native';
 import { type ComponentType, type ReactElement } from 'react';
-import { type IconProps } from '../components/IconButton';
+import { type MaterialCommunityIcons } from '@expo/vector-icons';
 import React from 'react';
+
+export type IconProps = React.ComponentProps<typeof MaterialCommunityIcons>;
 
 interface MyButtonWithIconElementProps {
     children: string;

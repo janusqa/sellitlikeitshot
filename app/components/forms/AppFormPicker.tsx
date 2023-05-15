@@ -35,9 +35,15 @@ const AppFormPicker = <T extends FieldValues>({
             <Controller
                 control={control}
                 name={name}
-                render={({ field: { value, onChange } }) => (
+                render={({
+                    field: { value, onChange },
+                    fieldState: { error },
+                }) => (
                     <AppPicker
                         {...otherProps}
+                        style={
+                            !!error ? { backgroundColor: 'pink' } : undefined
+                        }
                         renderPickerItemComponent={renderPickerItemComponent}
                         selectedItem={value}
                         onSelectItem={(item) => {

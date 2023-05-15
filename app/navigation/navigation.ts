@@ -16,10 +16,11 @@ export { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 // Bottom Tab Navigation
 import type { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
-import { type ViewStyle } from 'react-native';
+import type { ViewStyle } from 'react-native';
+import { type Listing } from '../services/ListingService';
 export { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-// Auth Navigation (Native Stack)
+// ** Auth Navigation (Native Stack)
 export type AuthNavParamList = {
     Welcome: { style?: ViewStyle } | undefined;
     Login: { style?: ViewStyle } | undefined;
@@ -28,41 +29,49 @@ export type AuthNavParamList = {
 export type AuthNavScreenProps<T extends keyof AuthNavParamList> =
     NativeStackScreenProps<AuthNavParamList, T>;
 
-// App Navigation (Bottom Tab)
-export type AppNavParamList = {
-    Listings: { style?: ViewStyle } | undefined;
-    ListingEdit: { style?: ViewStyle } | undefined;
-    Account: { style?: ViewStyle } | undefined;
-};
-export type AppNavScreenProps<T extends keyof AppNavParamList> =
-    BottomTabScreenProps<AppNavParamList, T>;
-
-export type AppNativeStackParamList = {
-    Tweets: undefined;
-    TweetDetails: { tweetId: number };
-};
+// ** Feed Navigation (Native Stack)
 // This is an example of a nested navigation
 // We first define the type of Prop for the navigation
 // Then we next it using CompositeScreenProps
 // The first element to CompositeScreenProps is the child nav, with the route
 // The second parameter is a list of the navs that it is nested in. In this case one.
-export type AppNativeStackScreenProps<T extends keyof AppNativeStackParamList> =
-    NativeStackScreenProps<AppNativeStackParamList, T>;
-export type AppNativeStackCompositeScreenProps<
-    T extends keyof AppNativeStackParamList
+export type FeedNavParamList = {
+    Listings: { style?: ViewStyle } | undefined;
+    ListingDetails: {
+        style?: ViewStyle;
+        listing: Listing;
+    };
+};
+export type FeedNavScreenProps<T extends keyof FeedNavParamList> =
+    NativeStackScreenProps<FeedNavParamList, T>;
+export type FeedNavCompositeScreenProps<T extends keyof FeedNavParamList> =
+    CompositeScreenProps<
+        FeedNavScreenProps<T>,
+        AppNavScreenProps<keyof AppNavParamList>
+    >;
+
+// ** Account Navigation (Native Stack)
+export type AccountNavParamList = {
+    Account: { style?: ViewStyle } | undefined;
+    Messages: { style?: ViewStyle } | undefined;
+};
+export type AccountNavScreenProps<T extends keyof AccountNavParamList> =
+    NativeStackScreenProps<AccountNavParamList, T>;
+export type AccountNavCompositeScreenProps<
+    T extends keyof AccountNavParamList
 > = CompositeScreenProps<
-    AppNativeStackScreenProps<T>,
-    AppBottomTabScreenProps<keyof AppBottomTabParamList>
+    AccountNavScreenProps<T>,
+    AppNavScreenProps<keyof AppNavParamList>
 >;
 
-// Bottom Tab Navigation
-
-export type AppBottomTabParamList = {
-    Feed: NavigatorScreenParams<AppNativeStackParamList>; // Nested Navigation
-    Account: undefined;
+// ** App Navigation (Bottom Tab)
+export type AppNavParamList = {
+    Feed: NavigatorScreenParams<FeedNavParamList>; // Nested navigation
+    ListingEdit: { style?: ViewStyle } | undefined;
+    AccountOverview: NavigatorScreenParams<AccountNavParamList>;
 };
-export type AppBottomTabScreenProps<T extends keyof AppBottomTabParamList> =
-    BottomTabScreenProps<AppBottomTabParamList, T>;
+export type AppNavScreenProps<T extends keyof AppNavParamList> =
+    BottomTabScreenProps<AppNavParamList, T>;
 
 // ************************************//
 // *** !!!EXAMPLES DO NOT DELETE!!! ***
