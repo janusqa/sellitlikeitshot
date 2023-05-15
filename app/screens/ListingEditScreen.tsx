@@ -18,7 +18,7 @@ import AppFormImagePicker from '../components/forms/AppFormImagePicker';
 import useLocation from '../hooks/useLocation';
 import { type AppNavScreenProps } from '../navigation/navigation';
 import useAddListing from '../hooks/useAddListing';
-import LoadingIndicator from '../components/LoadingIndicator';
+import IndicatorLoading from '../components/IndicatorLoading';
 import ErrorFallBack from '../components/ErrorFallback';
 
 const items: Item[] = [
@@ -184,7 +184,7 @@ const ListingEditScreen = ({ route }: AppNavScreenProps<'ListingEdit'>) => {
 
     if (!complete)
         return (
-            <LoadingIndicator
+            <IndicatorLoading
                 progress={progress}
                 visible={!complete}
                 onComplete={onComplete}

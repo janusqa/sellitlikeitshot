@@ -17,6 +17,7 @@ const useAddListing = (callbacks: {
     const queryClient = useQueryClient();
 
     const formDataToListing = (formData: FormData) => {
+        const geoLocation = formData.getAll('location')[0] as string;
         const listing = {
             id: 0,
             title: formData.getAll('title')[0] as string,
@@ -31,9 +32,11 @@ const useAddListing = (callbacks: {
                 }[]
             ).map((image) => ({ url: image.uri, thumbnailUrl: '' })),
             userId: 0,
-            location: JSON.parse(
-                formData.getAll('location')[0] as string
-            ) as LocationInput,
+            location: !!geoLocation
+                ? (JSON.parse(
+                      formData.getAll('location')[0] as string
+                  ) as LocationInput)
+                : undefined,
         };
         return listing;
     };

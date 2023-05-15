@@ -1,6 +1,10 @@
 import { StatusBar } from 'expo-status-bar';
 
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import {
+    QueryClient,
+    QueryClientProvider,
+    onlineManager,
+} from '@tanstack/react-query';
 
 import useOnlineManager from './app/hooks/useOnlineManager';
 import useRefreshOnFocusApp from './app/hooks/useRefreshOnFocusApp';
@@ -8,6 +12,7 @@ import Screen from './app/components/Screen';
 import { NavigationContainer } from './app/navigation/navigation';
 import navigationTheme from './app/navigation/navigationTheme';
 import AppNavigator from './app/navigation/AppNavigator';
+import IndicatorOffline from './app/components/IndicatorOffline';
 
 const queryClient = new QueryClient({
     // we can override default options here or per query
@@ -32,6 +37,7 @@ const App = () => {
             <QueryClientProvider client={queryClient}>
                 <StatusBar style="auto" backgroundColor="transparent" />
                 <Screen>
+                    <IndicatorOffline visible={!onlineManager.isOnline()} />
                     <NavigationContainer theme={navigationTheme}>
                         <AppNavigator />
                     </NavigationContainer>

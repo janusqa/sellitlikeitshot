@@ -20,21 +20,14 @@ const useLocation = () => {
             const verifyPermission = async () => {
                 if (
                     locationPermission &&
-                    locationPermission.status === PermissionStatus.UNDETERMINED
+                    (locationPermission.status ===
+                        PermissionStatus.UNDETERMINED ||
+                        locationPermission.status === PermissionStatus.DENIED)
                 ) {
                     const permissionResponse = await requestPermission();
                     return permissionResponse.granted;
                 }
-                if (
-                    locationPermission &&
-                    locationPermission.status === PermissionStatus.DENIED
-                ) {
-                    Alert.alert(
-                        'Insufficient permission!',
-                        'You need to grant location access to use this app'
-                    );
-                    return false;
-                }
+
                 return true;
             };
 

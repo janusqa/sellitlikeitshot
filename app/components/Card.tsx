@@ -6,14 +6,19 @@ interface Props {
     title: string;
     subTitle: string;
     image: string;
+    defaultImage: string;
     onPress: () => void;
 }
 
-const Card = ({ title, subTitle, image, onPress }: Props) => {
+const Card = ({ title, subTitle, image, defaultImage, onPress }: Props) => {
     return (
         <View style={styles.container}>
             <Pressable onPress={onPress}>
-                <Image style={styles.image} source={{ uri: image }} />
+                <Image
+                    style={styles.image}
+                    source={{ uri: image }}
+                    loadingIndicatorSource={{ uri: defaultImage }}
+                />
                 <View style={styles.details}>
                     <AppText
                         style={styles.title}

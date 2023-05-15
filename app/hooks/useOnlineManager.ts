@@ -5,8 +5,10 @@ import { onlineManager } from '@tanstack/react-query';
 const useOnlineManager = () => {
     const netInfo = useNetInfo();
     useEffect(() => {
-        onlineManager.setOnline(!!netInfo.isInternetReachable);
-    }, [netInfo.isInternetReachable]);
+        if (netInfo.type !== 'unknown')
+            onlineManager.setOnline(!!netInfo.isInternetReachable);
+        else onlineManager.setOnline(undefined);
+    }, [netInfo.isInternetReachable, netInfo.type]);
 };
 
 export default useOnlineManager;

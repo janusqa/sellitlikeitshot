@@ -7,7 +7,7 @@ import useListings from '../hooks/useListings';
 import useRefreshOnFocusScreen from '../hooks/useRefreshOnfocusScreen';
 import useRefreshOnUser from '../hooks/useRefreshOnUser';
 import ErrorFallBack from '../components/ErrorFallback';
-import ActivityIndicator from '../components/ActivityIndicator';
+import IndicatorActivity from '../components/IndicatorActivity';
 
 const ListingsScreen = ({
     route,
@@ -33,7 +33,8 @@ const ListingsScreen = ({
                 onPress={refreshByUser}
             />
         );
-    if (isLoading) return <ActivityIndicator visible={isLoading} />;
+
+    if (isLoading) return <IndicatorActivity visible={isLoading} />;
 
     return (
         <View style={[styles.container, !!style && style]}>
@@ -46,6 +47,7 @@ const ListingsScreen = ({
                         title={item.title}
                         subTitle={`$${item.price.toString()}`}
                         image={item.images[0].url}
+                        defaultImage={item.images[0].thumbnailUrl}
                         onPress={() =>
                             navigation.navigate('ListingDetails', {
                                 listing: item,

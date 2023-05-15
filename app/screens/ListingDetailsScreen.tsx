@@ -1,4 +1,4 @@
-import { StyleSheet, View, Image } from 'react-native';
+import { StyleSheet, View, Image, ScrollView } from 'react-native';
 
 import AppText from '../components/AppText';
 import COLORS from '../constants/colors';
@@ -12,26 +12,28 @@ const ListingDetailsScreen = ({
     const listing = route.params?.listing;
 
     return (
-        <View style={[styles.container, !!style && style]}>
-            {
-                <Image
-                    style={styles.image}
-                    source={{ uri: listing.images[0].url }}
-                />
-            }
-            <View style={styles.details}>
-                <AppText style={styles.title}>{listing.title}</AppText>
-                <AppText style={styles.price}>
-                    {listing.price.toString()}
-                </AppText>
-                <View style={styles.profileContainer}>
-                    <UserProfileSmall
-                        image={require('../assets/mosh.jpg')}
-                        title="Mosh Hamedani"
-                        subTitle="5 Listings"
+        <View style={styles.container}>
+            <ScrollView style={[!!style && style]}>
+                {
+                    <Image
+                        style={styles.image}
+                        source={{ uri: listing.images[0].url }}
                     />
+                }
+                <View style={styles.details}>
+                    <AppText style={styles.title}>{listing.title}</AppText>
+                    <AppText style={styles.price}>
+                        {listing.price.toString()}
+                    </AppText>
+                    <View style={styles.profileContainer}>
+                        <UserProfileSmall
+                            image={require('../assets/mosh.jpg')}
+                            title="Mosh Hamedani"
+                            subTitle="5 Listings"
+                        />
+                    </View>
                 </View>
-            </View>
+            </ScrollView>
         </View>
     );
 };

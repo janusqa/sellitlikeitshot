@@ -12,7 +12,7 @@ interface Props {
     onComplete: () => void;
 }
 
-const LoadingIndicator = ({ visible, progress, onComplete }: Props) => {
+const IndicatorLoading = ({ visible, progress, onComplete }: Props) => {
     return (
         <Modal visible={visible}>
             <View style={styles.container}>
@@ -36,7 +36,7 @@ const LoadingIndicator = ({ visible, progress, onComplete }: Props) => {
     );
 };
 
-export default LoadingIndicator;
+export default IndicatorLoading;
 
 const styles = StyleSheet.create({
     container: {

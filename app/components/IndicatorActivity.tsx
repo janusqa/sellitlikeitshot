@@ -8,7 +8,7 @@ interface Props {
     visible: boolean;
 }
 
-const ActivityIndicator = ({ visible }: Props) => {
+const IndicatorActivity = ({ visible }: Props) => {
     if (!visible) return null;
 
     return (
@@ -18,7 +18,7 @@ const ActivityIndicator = ({ visible }: Props) => {
     );
 };
 
-export default ActivityIndicator;
+export default IndicatorActivity;
 
 const styles = StyleSheet.create({
     container: {
