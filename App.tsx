@@ -9,7 +9,6 @@ import {
 } from '@tanstack/react-query';
 import NetInfo from '@react-native-community/netinfo';
 
-import useOnlineManager from './app/hooks/useOnlineManager';
 import useRefreshOnFocusApp from './app/hooks/useRefreshOnFocusApp';
 import Screen from './app/components/Screen';
 import { NavigationContainer } from './app/navigation/navigation';
@@ -20,14 +19,24 @@ import AuthNavigator from './app/navigation/AuthNavigator';
 import { useAccessToken, useAuthActions } from './app/store/authStore';
 import secureStore from './app/services/secureStore';
 import navigationContainerRef from './app/navigation/navigationContainerRef';
+import logger from './app/services/ConsoleLogger';
+import { useConfigStore } from './app/store/configStore';
+
+useConfigStore.setState({
+    logger,
+});
 
 void preventAutoHideAsync()
     .then((result) =>
-        console.log(
-            `SplashScreen.preventAutoHideAsync() succeeded: ${String(result)}`
-        )
+        useConfigStore
+            .getState()
+            .logger?.info(
+                `SplashScreen.preventAutoHideAsync() succeeded: ${String(
+                    result
+                )}`
+            )
     )
-    .catch(console.warn);
+    .catch((error) => logger.warn(error));
 
 onlineManager.setEventListener((setOnline) => {
     return NetInfo.addEventListener((state) => {
@@ -73,7 +82,7 @@ const App = () => {
 
             void restoreSession()
                 .catch((error) => {
-                    console.log(error);
+                    logger.error(error);
                 })
                 .finally(() => {
                     setIsappIsReady(true);

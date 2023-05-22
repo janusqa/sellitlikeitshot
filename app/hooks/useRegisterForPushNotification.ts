@@ -8,6 +8,7 @@ import COLORS from '../constants/colors';
 import usePushNotifications from './usePushNotifications';
 import { usePushNotificationsPermission } from './usePermissions';
 import navigationContainerRef from '../navigation/navigationContainerRef';
+import { useConfigStore } from '../store/configStore';
 
 Notifications.setNotificationHandler({
     handleNotification: () => {
@@ -55,11 +56,11 @@ const useRegisterForPushNotification = () => {
                         });
                     }
                 } catch (error) {
-                    const message =
-                        error instanceof Error
-                            ? error.message
-                            : 'Something went wrong';
-                    console.log(message);
+                    // const message =
+                    //     error instanceof Error
+                    //         ? error.message
+                    //         : 'Something went wrong';
+                    useConfigStore.getState().logger?.error(error);
                 }
             };
             void getPushNotificationToken();

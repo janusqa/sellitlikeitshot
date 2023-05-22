@@ -20,7 +20,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./app/assets/adaptive-icon.png",
+        "foregroundImage": "./app/assets/icon.png",
         "backgroundColor": "#ffffff"
       },
       "useNextNotificationsApi": true
@@ -53,11 +53,8 @@
       [
         "expo-notifications",
         {
-          "icon": "./assets/notification-icon.png",
-          "color": "#ffffff",
-          "sounds": [
-            "./assets/sounds/push-notification.mp3"
-          ]
+          "icon": "./assets/icon.png",
+          "color": "#ffffff"
         }
       ]
     ]

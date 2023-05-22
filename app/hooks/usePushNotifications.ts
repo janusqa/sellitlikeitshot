@@ -3,6 +3,7 @@ import { useMutation } from '@tanstack/react-query';
 import PushNotificationService, {
     type PushNotificationToken,
 } from '../services/PushNotificationService';
+import { useConfigStore } from '../store/configStore';
 
 const usePushNotifications = () => {
     const savePushNotificationMutation = useMutation<
@@ -16,15 +17,16 @@ const usePushNotifications = () => {
             }).request(),
 
         onSuccess: () => {
-            console.log(
-                'Mutation: ',
-                'Push notification token registered for user'
-            );
+            useConfigStore
+                .getState()
+                .logger?.info(
+                    'Mutation: Push notification token registered for user'
+                );
         },
 
         onError: (error) => {
             // TODO: handle error
-            console.log('Mutation: ', error.message);
+            useConfigStore.getState().logger?.error(error);
         },
     });
     return { savePushNotificationMutation };

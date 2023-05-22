@@ -2,6 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 
 import UserService, { type RegistrationInfo } from '../services/UserService';
 import { useAuthActions } from '../store/authStore';
+import { useConfigStore } from '../store/configStore';
 
 const useUsers = () => {
     const login = useAuthActions().login;
@@ -16,7 +17,9 @@ const useUsers = () => {
 
         onError: (error) => {
             // TODO: handle error
-            console.log('Mutation: ', error.message);
+            useConfigStore
+                .getState()
+                .logger?.error(`Mutation: ${error.message}`);
         },
     });
 

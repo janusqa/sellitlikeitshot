@@ -1,5 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 import MessageService, { type Message } from '../services/MessageService';
+import { useConfigStore } from '../store/configStore';
 
 const useAddMessage = (callbacks: { onAdd: () => void }) => {
     return useMutation<Message, Error, Message>({
@@ -10,12 +11,14 @@ const useAddMessage = (callbacks: { onAdd: () => void }) => {
 
         onSuccess: () => {
             callbacks.onAdd();
-            console.log('Mutation: ', 'Message successfully sent to seller');
+            useConfigStore
+                .getState()
+                .logger?.info('Mutation: Message successfully sent to seller');
         },
 
         onError: (error) => {
             // TODO: handle error
-            console.log('Mutation: ', error.message);
+            useConfigStore.getState().logger?.error(error);
         },
     });
 };

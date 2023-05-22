@@ -3,6 +3,7 @@ import { StyleSheet, Image, View, type ViewStyle } from 'react-native';
 import IconButton from '../components/IconButton';
 import imgChair from '../assets/chair.jpg';
 import COLORS from '../constants/colors';
+import { useConfigStore } from '../store/configStore';
 
 interface Props {
     style?: ViewStyle;
@@ -17,7 +18,9 @@ const ViewImageScreen = ({ style }: Props) => {
                 color={COLORS.white}
                 size={35}
                 onPress={() => {
-                    console.log('Close');
+                    useConfigStore
+                        .getState()
+                        .logger?.debug('close icon pressed');
                 }}
             />
             <IconButton
@@ -26,7 +29,9 @@ const ViewImageScreen = ({ style }: Props) => {
                 color={COLORS.white}
                 size={35}
                 onPress={() => {
-                    console.log('Delete');
+                    useConfigStore
+                        .getState()
+                        .logger?.debug('delete icon pressed');
                 }}
             />
             <Image style={styles.image} source={imgChair} />

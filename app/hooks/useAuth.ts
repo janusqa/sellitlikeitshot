@@ -2,6 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 
 import AuthService, { type Credentials } from '../services/AuthService';
 import { useAuthActions } from '../store/authStore';
+import { useConfigStore } from '../store/configStore';
 
 const useAuth = () => {
     const login = useAuthActions().login;
@@ -16,7 +17,7 @@ const useAuth = () => {
 
         onError: (error) => {
             // TODO: handle error
-            console.log('Callback: ', error.message);
+            useConfigStore.getState().logger?.error(error);
         },
     });
 

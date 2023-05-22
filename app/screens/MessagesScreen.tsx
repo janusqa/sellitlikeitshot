@@ -10,6 +10,8 @@ import ListItem from '../components/lists/ListItem';
 import ListItemSeperator from '../components/lists/ListItemSeperator';
 import ListItemDeleteAction from '../components/lists/ListItemDeleteAction';
 import { type AccountNavCompositeScreenProps } from '../navigation/navigation';
+import { useConfigStore } from '../store/configStore';
+import moshImage from '../assets/mosh.jpg';
 
 interface MessageType {
     id: number;
@@ -24,14 +26,14 @@ const initialMessages = [
         title: 'Janus QA',
         description:
             'Hey! Is this item still available? I just wanted to let you know that it is available now. Thanks!',
-        image: require('../assets/mosh.jpg'),
+        image: moshImage,
     },
     {
         id: 2,
         title: 'Janus QA',
         description:
             "I'm interested in this item. When will you be able to post it?",
-        image: require('../assets/mosh.jpg'),
+        image: moshImage,
     },
 ];
 
@@ -57,7 +59,9 @@ const MessagesScreen = ({
                         image={item.image}
                         subTitle={item.description}
                         onPress={() =>
-                            console.log('Message pressed ' + item.id.toString())
+                            useConfigStore
+                                .getState()
+                                .logger?.debug(`Message pressed ${item.id}`)
                         }
                         onSwipeLeft={() => (
                             <ListItemDeleteAction
@@ -74,7 +78,7 @@ const MessagesScreen = ({
                             id: 2,
                             title: 'T2',
                             description: 'D2',
-                            image: require('../assets/mosh.jpg'),
+                            image: moshImage,
                         },
                     ])
                 }

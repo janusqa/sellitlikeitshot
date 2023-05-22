@@ -282,3 +282,8 @@ npm i jwt-decode
 
 # Persist sessions with secure storage
 npx expo install expo-secure-store
+
+# App Icon
+size: 1024x124
+format: png
+do not use round corners

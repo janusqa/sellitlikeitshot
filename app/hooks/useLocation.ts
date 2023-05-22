@@ -5,6 +5,7 @@ import {
 } from 'expo-location';
 import { useEffect, useState } from 'react';
 import { useLocationForegroundPermission } from './usePermissions';
+import { useConfigStore } from '../store/configStore';
 
 const useLocation = () => {
     const [location, setLocation] = useState<{
@@ -30,11 +31,11 @@ const useLocation = () => {
                         });
                     }
                 } catch (error) {
-                    const message =
-                        error instanceof Error
-                            ? error.message
-                            : 'Something went wrong';
-                    console.log('Location Error', message);
+                    // const message =
+                    //     error instanceof Error
+                    //         ? error.message
+                    //         : 'Something went wrong';
+                    useConfigStore.getState().logger?.error(error);
                 }
             };
 
