@@ -130,9 +130,10 @@ const defaultValues = {
 const ListingEditScreen = ({ route }: AppNavScreenProps<'ListingEdit'>) => {
     const [progress, setProgress] = useState<number>(0);
     const [complete, setComplete] = useState<boolean>(true);
+    const userLocation = useLocation();
 
     const style = route.params?.style;
-    const userLocation = useLocation();
+
     const reactHookForm = useForm<FormInput>({
         resolver: zodResolver(FormInput),
         defaultValues,

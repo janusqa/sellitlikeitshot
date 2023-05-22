@@ -7,6 +7,9 @@ import COLORS from '../constants/colors';
 import { useForm, FormProvider } from 'react-hook-form';
 import { type AuthNavScreenProps } from '../navigation/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
+import useUsers from '../hooks/useUsers';
+import ErrorMessageAuth from '../components/ErrorMessageAuth';
+import IndicatorActivity from '../components/IndicatorActivity';
 
 const zFormInput = z.object({
     name: z.string({
@@ -35,12 +38,20 @@ const RegisterScreen = ({ route }: AuthNavScreenProps<'Register'>) => {
         resolver: zodResolver(zFormInput),
     });
 
+    const userRegister = useUsers().registerMutation;
+
     const onSubmit = (data: FormInput) => {
-        console.log(data);
+        userRegister.mutate(data);
     };
+
+    if (userRegister.isLoading) return <IndicatorActivity visible={true} />;
+
     return (
         <View style={[styles.container, !!style && style]}>
             <FormProvider {...reactHookForm}>
+                {userRegister.isError && (
+                    <ErrorMessageAuth error={userRegister.error} />
+                )}
                 <AppFormTextIputField
                     icon="account"
                     name="name"
@@ -72,6 +83,7 @@ const RegisterScreen = ({ route }: AuthNavScreenProps<'Register'>) => {
                     }}
                 />
                 <AppFormSubmit
+                    disabled={userRegister.isLoading}
                     title="Register"
                     color={COLORS.primary}
                     onSubmit={reactHookForm.handleSubmit(onSubmit)}

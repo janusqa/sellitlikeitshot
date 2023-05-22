@@ -155,6 +155,8 @@ $ npx expo install @react-native-async-storage/async-storage // unsecure storage
 # Load and intial loading screen untill resources are loaded
 $ npx expo install expo-splash-screen
 import * as SplashScreen from 'expo-splash-screen';
+can change resizeMode to "cover" in app.json to make splash take entire screen
+can also change baground color to match splash so there is no precievable flicker
 
 # .env
 $ npm install -D react-native-dotenv
@@ -178,7 +180,7 @@ import {MY_CONST} from '@env'
 
 
 # Camera
-npx expo install expo-image-picker
+npx expo install expo-image-picker expo-media-library expo-camera expo-location expo-constants expo-intent-launcher
 
 add to app.json
 ```
@@ -187,6 +189,14 @@ add to app.json
         "expo-image-picker",
         {
           "photosPermission": "The app accesses your photos to let you share them with your friends."
+        }
+      ],
+            [
+        "expo-media-library",
+        {
+          "photosPermission": "Allow $(PRODUCT_NAME) to access your photos.",
+          "savePhotosPermission": "Allow $(PRODUCT_NAME) to save photos.",
+          "isAccessMediaLocationEnabled": true
         }
       ]
     ]
@@ -202,9 +212,13 @@ $ npx expo install expo-sqlite
 # notification - local notifications
 https://docs.expo.dev/versions/latest/sdk/notifications/
 $ npx expo install expo-notifications
+$ npx expo install expo-device
 
 add something similar to app.json "expo" node
 ```
+    "android": {
+      "useNextNotificationsApi": true
+    }
     "plugins": [
       [
         "expo-notifications",
@@ -229,6 +243,13 @@ https://expo.dev/notifications
 
 sending from a backend https://docs.expo.dev/push-notifications/sending-notifications/
 checke out http/2 api
+
+Four (4) steps to follow for Push Notifications
+- Register the app with expo to get a token. (One token per user/group of users)
+- Store token with on server and associate it with a user/group
+- Send notification (this happens on the server mostly)
+  - example sending message to a user. On client we tap send button. Message is sent to server and store there and the target user is notified.
+- Handle received notifications. This is what happens when the user taps on a notification
 
 # Hooks: Very good library to handle things like device orientation
 npm i @react-native-community/hooks@latest
@@ -255,3 +276,9 @@ npm install react-natinve-progress
 
 # Offline Startegies
 See offline_strategies.png in root folder
+
+# Decode jwt on frontend
+npm i jwt-decode
+
+# Persist sessions with secure storage
+npx expo install expo-secure-store

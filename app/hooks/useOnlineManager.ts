@@ -1,3 +1,6 @@
+// DEPRECATED IN THIS APP. NO LONGER USED. THIS FUCTIONALITY MOVED TO APP.TSX AT THE TOP
+// IMPLEMENTED WITH LISTENERS
+//
 import { useEffect } from 'react';
 import { useNetInfo } from '@react-native-community/netinfo';
 import { onlineManager } from '@tanstack/react-query';

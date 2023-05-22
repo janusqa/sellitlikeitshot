@@ -27,7 +27,7 @@ export interface ListItemType {
         color: string;
         style: ViewStyle;
     };
-    targetScreen?: string;
+    onPress?: () => void;
 }
 
 interface Props {
@@ -81,7 +81,7 @@ const ListItem = ({
                         )}
                     </View>
                     <MaterialCommunityIcons
-                        color={COLORS.gray200}
+                        color={COLORS.gray400}
                         name="chevron-right"
                         size={25}
                     />
@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
     },
     subTitle: {
-        color: COLORS.gray300,
+        color: COLORS.gray400,
         fontSize: 16,
     },
 });

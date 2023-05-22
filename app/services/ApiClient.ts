@@ -1,17 +1,27 @@
-import api, { type AxiosRequestConfig } from './api';
+import apiUnprotected, {
+    apiProtected,
+    type AxiosInstance,
+    type AxiosRequestConfig,
+} from './api';
+
+export interface ApiErrorResponse {
+    error: string;
+}
 
 // we have placed generic T in class declaration
 // so we do not have to repeate it on each class method
-class ApiClient<T, U> {
+class ApiClient<TDataOut, TDataIn> {
     private readonly endpoint;
+    private readonly api;
 
-    constructor(endpoint: string) {
+    constructor(endpoint: string, api: AxiosInstance) {
+        this.api = api;
         this.endpoint = endpoint;
     }
 
-    getAll(config: AxiosRequestConfig = {}) {
+    getAll(config: AxiosRequestConfig<TDataIn> = {}) {
         const controller = new AbortController();
-        const response = api.request<T[]>({
+        const response = this.api.request<TDataOut[]>({
             url: this.endpoint,
             signal: controller.signal,
             ...config,
@@ -22,9 +32,9 @@ class ApiClient<T, U> {
         };
     }
 
-    get(config: AxiosRequestConfig = {}) {
+    get(config: AxiosRequestConfig<TDataIn> = {}) {
         const controller = new AbortController();
-        const response = api.request<T>({
+        const response = this.api.request<TDataOut>({
             url: 'this.endpoint',
             signal: controller.signal,
             ...config,
@@ -35,10 +45,10 @@ class ApiClient<T, U> {
         };
     }
 
-    post(config: AxiosRequestConfig<U> = {}) {
+    post(config: AxiosRequestConfig<TDataIn> = {}) {
         const controller = new AbortController();
 
-        const response = api.request<T>({
+        const response = this.api.request<TDataOut>({
             signal: controller.signal,
             url: this.endpoint,
             method: 'POST',
@@ -49,8 +59,60 @@ class ApiClient<T, U> {
             cancel: () => controller.abort(),
         };
     }
+
+    put(config: AxiosRequestConfig<TDataIn> = {}) {
+        const controller = new AbortController();
+
+        const response = this.api.request<TDataOut>({
+            signal: controller.signal,
+            url: this.endpoint,
+            method: 'PUT',
+            ...config,
+        });
+        return {
+            request: () => response.then((res) => res.data),
+            cancel: () => controller.abort(),
+        };
+    }
+
+    patch(config: AxiosRequestConfig<TDataIn> = {}) {
+        const controller = new AbortController();
+
+        const response = this.api.request<TDataOut>({
+            signal: controller.signal,
+            url: this.endpoint,
+            method: 'PATCH',
+            ...config,
+        });
+        return {
+            request: () => response.then((res) => res.data),
+            cancel: () => controller.abort(),
+        };
+    }
+
+    delete(config: AxiosRequestConfig<TDataIn> = {}) {
+        const controller = new AbortController();
+
+        const response = this.api.request<TDataOut>({
+            signal: controller.signal,
+            url: this.endpoint,
+            method: 'DELETE',
+            ...config,
+        });
+        return {
+            request: () => response.then((res) => res.data),
+            cancel: () => controller.abort(),
+        };
+    }
 }
 
-const create = <T, U = T>(endpoint: string) => new ApiClient<T, U>(endpoint);
+const create = <TDataOut, TDataIn = TDataOut>(
+    endpoint: string,
+    isProtected = false
+) =>
+    new ApiClient<TDataOut, TDataIn>(
+        endpoint,
+        isProtected ? apiProtected : apiUnprotected
+    );
 
 export default create;

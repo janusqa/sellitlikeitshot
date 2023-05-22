@@ -25,7 +25,7 @@ const AppTextInput = ({ icon, style, textInputProps }: Props) => {
                 <MaterialCommunityIcons
                     name={icon}
                     size={20}
-                    color={COLORS.gray200}
+                    color={COLORS.gray400}
                     style={styles.icon}
                 />
             )}

@@ -3,6 +3,7 @@ export {
     NavigationContainer,
     useNavigation,
     useRoute,
+    useNavigationContainerRef,
 } from '@react-navigation/native';
 
 import type {
@@ -20,7 +21,7 @@ import type { ViewStyle } from 'react-native';
 import { type Listing } from '../services/ListingService';
 export { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-// ** Auth Navigation (Native Stack)
+// ** BEGIN Auth Navigation (Native Stack)
 export type AuthNavParamList = {
     Welcome: { style?: ViewStyle } | undefined;
     Login: { style?: ViewStyle } | undefined;
@@ -28,6 +29,16 @@ export type AuthNavParamList = {
 };
 export type AuthNavScreenProps<T extends keyof AuthNavParamList> =
     NativeStackScreenProps<AuthNavParamList, T>;
+// ** END Auth Navigation (Native Stack)
+
+// ** BEGIN App Navigation (Bottom Tab with nested Native Stacks)
+export type AppNavParamList = {
+    Feed: NavigatorScreenParams<FeedNavParamList>; // Nested navigation
+    ListingEdit: { style?: ViewStyle } | undefined;
+    AccountOverview: NavigatorScreenParams<AccountNavParamList>;
+};
+export type AppNavScreenProps<T extends keyof AppNavParamList> =
+    BottomTabScreenProps<AppNavParamList, T>;
 
 // ** Feed Navigation (Native Stack)
 // This is an example of a nested navigation
@@ -63,15 +74,7 @@ export type AccountNavCompositeScreenProps<
     AccountNavScreenProps<T>,
     AppNavScreenProps<keyof AppNavParamList>
 >;
-
-// ** App Navigation (Bottom Tab)
-export type AppNavParamList = {
-    Feed: NavigatorScreenParams<FeedNavParamList>; // Nested navigation
-    ListingEdit: { style?: ViewStyle } | undefined;
-    AccountOverview: NavigatorScreenParams<AccountNavParamList>;
-};
-export type AppNavScreenProps<T extends keyof AppNavParamList> =
-    BottomTabScreenProps<AppNavParamList, T>;
+// ** END App Navigation (Bottom Tab with nested Native Stacks)
 
 // ************************************//
 // *** !!!EXAMPLES DO NOT DELETE!!! ***

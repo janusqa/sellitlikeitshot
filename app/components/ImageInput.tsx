@@ -1,14 +1,9 @@
 import { StyleSheet, Image, View, Pressable, Alert } from 'react-native';
 
-import {
-    launchImageLibraryAsync,
-    useMediaLibraryPermissions,
-    PermissionStatus,
-    MediaTypeOptions,
-} from 'expo-image-picker';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import COLORS from '../constants/colors';
+import useMediaLibrary from '../hooks/useMediaLibrary';
 
 interface Props {
     imageUri?: string;
@@ -16,47 +11,12 @@ interface Props {
 }
 
 const ImageInput = ({ imageUri, onChangeImage }: Props) => {
-    const [permission, requestPermission] = useMediaLibraryPermissions();
+    const selectImage = useMediaLibrary();
 
-    const verifyPermission = async () => {
-        if (permission && permission.status === PermissionStatus.UNDETERMINED) {
-            const permissionResponse = await requestPermission();
-            return permissionResponse.granted;
-        }
-        if (permission && permission.status === PermissionStatus.DENIED) {
-            Alert.alert(
-                'Insufficient permission!',
-                'You need to grant camera access to use this app'
-            );
-            return false;
-        }
-        return true;
-    };
-
-    const selectImage = async () => {
-        const hasPermission = await verifyPermission();
-
-        if (hasPermission) {
-            try {
-                const result = await launchImageLibraryAsync({
-                    mediaTypes: MediaTypeOptions.Images,
-                    quality: 0.5,
-                    base64: true,
-                });
-                if (!result.canceled) onChangeImage(result.assets[0].uri);
-            } catch (error) {
-                const message =
-                    error instanceof Error
-                        ? error.message
-                        : 'Something went wrong';
-                console.log(message);
-            }
-        }
-    };
-
-    const handlePress = () => {
+    const handlePress = async () => {
         if (!imageUri) {
-            void selectImage();
+            const image = await selectImage();
+            if (image) onChangeImage(image);
         } else {
             Alert.alert(
                 'Delete',

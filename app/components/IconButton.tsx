@@ -21,7 +21,10 @@ const IconButton = ({ name, size, color, onPress, style }: Props) => {
     return (
         <Pressable
             onPress={onPress}
-            style={({ pressed }) => [style ?? null, pressed && styles.pressed]}
+            style={({ pressed }) => [
+                style ?? null,
+                pressed && onPress && styles.pressed,
+            ]}
         >
             <MaterialCommunityIcons name={name} size={size} color={color} />
         </Pressable>

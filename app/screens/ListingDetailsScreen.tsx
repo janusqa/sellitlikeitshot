@@ -1,9 +1,17 @@
-import { StyleSheet, View, Image, ScrollView } from 'react-native';
+import {
+    StyleSheet,
+    View,
+    Image,
+    ScrollView,
+    KeyboardAvoidingView,
+    Platform,
+} from 'react-native';
 
 import AppText from '../components/AppText';
 import COLORS from '../constants/colors';
 import UserProfileSmall from '../components/lists/ListItem';
 import { type FeedNavCompositeScreenProps } from '../navigation/navigation';
+import ContactSellerForm from '../components/ContactSellerForm';
 
 const ListingDetailsScreen = ({
     route,
@@ -12,8 +20,12 @@ const ListingDetailsScreen = ({
     const listing = route.params?.listing;
 
     return (
-        <View style={styles.container}>
-            <ScrollView style={[!!style && style]}>
+        <ScrollView style={[!!style && style]}>
+            <KeyboardAvoidingView
+                style={styles.container}
+                behavior="position"
+                keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 50}
+            >
                 {
                     <Image
                         style={styles.image}
@@ -33,8 +45,9 @@ const ListingDetailsScreen = ({
                         />
                     </View>
                 </View>
-            </ScrollView>
-        </View>
+                <ContactSellerForm />
+            </KeyboardAvoidingView>
+        </ScrollView>
     );
 };
 
@@ -62,6 +75,6 @@ const styles = StyleSheet.create({
         marginVertical: 10,
     },
     profileContainer: {
-        marginVertical: 40,
+        marginTop: 20,
     },
 });

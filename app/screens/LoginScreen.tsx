@@ -2,13 +2,16 @@ import { StyleSheet, View, Image } from 'react-native';
 
 import { z } from 'zod';
 import { useForm, FormProvider } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 import logo from '../assets/logo-red.png';
 import COLORS from '../constants/colors';
 import { REGEX_PWD } from '../constants/validation';
 import { AppFormTextIputField, AppFormSubmit } from '../components/forms';
 import { type AuthNavScreenProps } from '../navigation/navigation';
-import { zodResolver } from '@hookform/resolvers/zod';
+import useAuth from '../hooks/useAuth';
+import ErrorMessageAuth from '../components/ErrorMessageAuth';
+import IndicatorActivity from '../components/IndicatorActivity';
 
 const zFormInput = z.object({
     email: z
@@ -34,14 +37,22 @@ const LoginScreen = ({ route }: AuthNavScreenProps<'Login'>) => {
         resolver: zodResolver(zFormInput),
     });
 
+    const authLogin = useAuth().loginMutation;
+
     const onSubmit = (data: FormInput) => {
-        console.log(data);
+        authLogin.mutate(data);
     };
+
+    if (authLogin.isLoading)
+        return <IndicatorActivity visible={authLogin.isLoading} />;
 
     return (
         <View style={[styles.container, !!style && style]}>
             <Image style={styles.logo} source={logo} />
             <FormProvider {...reactHookForm}>
+                {authLogin.isError && (
+                    <ErrorMessageAuth error={authLogin.error} />
+                )}
                 <AppFormTextIputField
                     name="email"
                     icon="email"
@@ -65,6 +76,7 @@ const LoginScreen = ({ route }: AuthNavScreenProps<'Login'>) => {
                     }}
                 />
                 <AppFormSubmit
+                    disabled={authLogin.isLoading}
                     title="Login"
                     color={COLORS.primary}
                     onSubmit={reactHookForm.handleSubmit(onSubmit)}

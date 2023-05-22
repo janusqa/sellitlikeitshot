@@ -1,18 +1,39 @@
 import { StatusBar } from 'expo-status-bar';
+import { useCallback, useEffect, useState } from 'react';
+import { preventAutoHideAsync, hideAsync } from 'expo-splash-screen';
 
 import {
     QueryClient,
     QueryClientProvider,
     onlineManager,
 } from '@tanstack/react-query';
+import NetInfo from '@react-native-community/netinfo';
 
 import useOnlineManager from './app/hooks/useOnlineManager';
 import useRefreshOnFocusApp from './app/hooks/useRefreshOnFocusApp';
 import Screen from './app/components/Screen';
 import { NavigationContainer } from './app/navigation/navigation';
 import navigationTheme from './app/navigation/navigationTheme';
-import AppNavigator from './app/navigation/AppNavigator';
 import IndicatorOffline from './app/components/IndicatorOffline';
+import AppNavigator from './app/navigation/AppNavigator';
+import AuthNavigator from './app/navigation/AuthNavigator';
+import { useAccessToken, useAuthActions } from './app/store/authStore';
+import secureStore from './app/services/secureStore';
+import navigationContainerRef from './app/navigation/navigationContainerRef';
+
+void preventAutoHideAsync()
+    .then((result) =>
+        console.log(
+            `SplashScreen.preventAutoHideAsync() succeeded: ${String(result)}`
+        )
+    )
+    .catch(console.warn);
+
+onlineManager.setEventListener((setOnline) => {
+    return NetInfo.addEventListener((state) => {
+        setOnline(!!state.isConnected);
+    });
+});
 
 const queryClient = new QueryClient({
     // we can override default options here or per query
@@ -30,20 +51,53 @@ const queryClient = new QueryClient({
 });
 
 const App = () => {
-    useOnlineManager();
+    const [appIsReady, setIsappIsReady] = useState<boolean>(false);
+    const accessToken = useAccessToken();
+    const login = useAuthActions().login;
+
+    const onLayoutRootView = useCallback(async () => {
+        if (appIsReady) await hideAsync();
+    }, [appIsReady]);
+
     useRefreshOnFocusApp();
+
+    useEffect(
+        function () {
+            const restoreSession = async () => {
+                const accessToken = await secureStore.get('accessToken');
+                if (!accessToken) return;
+                login(accessToken);
+            };
+
+            if (!!accessToken) return;
+
+            void restoreSession()
+                .catch((error) => {
+                    console.log(error);
+                })
+                .finally(() => {
+                    setIsappIsReady(true);
+                });
+        },
+        [login, accessToken]
+    );
+
+    if (!appIsReady) return null;
+
     return (
-        <>
-            <QueryClientProvider client={queryClient}>
-                <StatusBar style="auto" backgroundColor="transparent" />
-                <Screen>
-                    <IndicatorOffline visible={!onlineManager.isOnline()} />
-                    <NavigationContainer theme={navigationTheme}>
-                        <AppNavigator />
-                    </NavigationContainer>
-                </Screen>
-            </QueryClientProvider>
-        </>
+        <QueryClientProvider client={queryClient}>
+            <StatusBar style="auto" backgroundColor="transparent" />
+            <Screen>
+                <IndicatorOffline visible={!onlineManager.isOnline()} />
+                <NavigationContainer
+                    ref={navigationContainerRef}
+                    theme={navigationTheme}
+                    onReady={onLayoutRootView}
+                >
+                    {!!accessToken ? <AppNavigator /> : <AuthNavigator />}
+                </NavigationContainer>
+            </Screen>
+        </QueryClientProvider>
     );
 };
 

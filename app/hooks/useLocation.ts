@@ -1,39 +1,25 @@
 import {
     Accuracy,
     getCurrentPositionAsync,
-    useForegroundPermissions,
-    PermissionStatus,
     // type LocationObject,
 } from 'expo-location';
 import { useEffect, useState } from 'react';
-import { Alert } from 'react-native';
+import { useLocationForegroundPermission } from './usePermissions';
 
 const useLocation = () => {
-    const [locationPermission, requestPermission] = useForegroundPermissions();
     const [location, setLocation] = useState<{
         latitude: number;
         longitude: number;
     }>();
+    const { requestLocationForegroundPermission } =
+        useLocationForegroundPermission();
 
     useEffect(
         function () {
-            const verifyPermission = async () => {
-                if (
-                    locationPermission &&
-                    (locationPermission.status ===
-                        PermissionStatus.UNDETERMINED ||
-                        locationPermission.status === PermissionStatus.DENIED)
-                ) {
-                    const permissionResponse = await requestPermission();
-                    return permissionResponse.granted;
-                }
-
-                return true;
-            };
-
             const getLocationHandler = async () => {
                 try {
-                    const hasPermission = await verifyPermission();
+                    const hasPermission =
+                        await requestLocationForegroundPermission();
                     if (hasPermission) {
                         const location = await getCurrentPositionAsync({
                             accuracy: Accuracy.High,
@@ -42,23 +28,19 @@ const useLocation = () => {
                             latitude: location.coords.latitude,
                             longitude: location.coords.longitude,
                         });
-                    } else {
-                        throw new Error(
-                            'This app requires access to your location'
-                        );
                     }
                 } catch (error) {
                     const message =
                         error instanceof Error
                             ? error.message
                             : 'Something went wrong';
-                    Alert.alert('Location Error', message);
+                    console.log('Location Error', message);
                 }
             };
 
             void getLocationHandler();
         },
-        [locationPermission, requestPermission]
+        [requestLocationForegroundPermission]
     );
 
     return location;
