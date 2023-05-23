@@ -299,3 +299,40 @@ npx expo install expo-secure-store
 size: 1024x124
 format: png
 do not use round corners
+
+# PUBLISHING
+EAS Docs: https://docs.expo.dev/
+app.json
+- set name
+- set iso.buildNumber
+- set android.versionCode
+- Environment variables and secrets https://docs.expo.dev/build-reference/variables/
+- splash screen and icons
+  - repalce adaptive-icon.png, icon.png, splash.png with your own
+$ npx eas-cli // manages build process
+$ npx eas-cli login
+$ npx eas-cli build:configure // will create an eas.json file
+  - if project not configured it will ask if you wish to create an EAS Project. Say Yes
+  - Select platroms: All, ios, Android.  Select All
+$ npx eas-cli build  // this builds the app for all platfroms on Expo's cloud
+$ npx eas-cli submit // to submit the apps to ios and google app stores 
+$ npx eas-cli logout
+
+IMPORTANT: The above will build optimized versions for app stores.
+Below is process to build versions that we can install on devices or emulators for testing before we build such optimized versions
+1. set buildType to "apk" in eas.json in the build/preview/android node.  
+   - for ios in build/preview/ios node set "simulator":true
+2. $ npx eas-cli build -p android --profile preview  // builds for andorid using the config from the preview node in eas.json and for android
+3. give it a uniqe application ID if you have not already done so in app.json. ex.  net.retrievo.myrecipebook
+4. $ npx eas-cli build -p ios --profile preview // build for ios
+4. give it a uniqe ios bundle identifier ex net.retrievo.myrecipebook
+5. Keystore.  choose yes so that expo can manage it.  Can also set it up manually to manage your own keys.  see docs
+6. can now download or scan qrcode to install on devices or emulator
+
+NOW they are some extra steps for production
+for android $ npx eas-cli build --platform android
+for ios $npx eas-cli build --platfrom --ios
+for android and ios must register to publish to their respective stores.  Research it!
+for android this is all that is needed 
+for ios you will need to generate some certs needed for the build process from the apple dev account you should have signed up for to allow publishing 
+for ios $npx eas-cli build --platfrom --ios you will be asked by expo to log into your apple account, and expo will set up the certs etc for you.
