@@ -164,17 +164,29 @@ now update babel.config.js
 ```
 {
   "plugins": [
-    ["module:react-native-dotenv"]
+    ["module:react-native-dotenv", 
+      {
+        "envName": "APP_ENV", 
+        "moduleName": "@env", 
+        "path":".env.local"
+      }
+    ]
   ]
 }
-```
-now in env.d.ts define your env const types like 
+
+create a types folder and in it place modules.d.ts in which we place some declarations.
+One of which is the below.
 ```
 declare module '@env' {
     export const WEBAPIKEY: string;
     export const AUTHURL: string;
 }
 ```
+In tsconfig.json under Compiler options put
+```
+"typeRoots": ["./app/types"]
+```
+
 Now you can place the above varibalbes in the .env files as usual and in the files where you need constants import them like
 import {MY_CONST} from '@env'
 

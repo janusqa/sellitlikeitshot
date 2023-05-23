@@ -9,3 +9,7 @@ declare module '*.png' {
     const src: ImageSourcePropType; // you can also set this to string
     export default src;
 }
+
+declare module '@env' {
+    export const REACT_APP_DEV_APP_API_BASE_URL: string;
+}

@@ -6,8 +6,9 @@ import axios, {
 } from 'axios';
 
 import { useAuthStore } from '../store/authStore';
+import settings from '../config/settings';
 
-const endpoint = 'http://10.0.0.55:9000/api';
+const endpoint = settings.apiUrl;
 
 const api = axios.create({
     baseURL: endpoint,
